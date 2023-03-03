@@ -4,7 +4,7 @@
 <h1 aligh="center"> Sistema de Aluguel de carro com tabela CARRO|CLIENTE|LOCACAO|USUARIO <h2>
 <h1 aligh="center"> Persistencia dos dados em PostegreSQL e  o H2 para os testes unitarios <h2>
 
-<strong>Repositorio do BackEnd SpringBootAPI</strong> </br>
+<strong>Repositorio do BackEnd SpringBoot</strong> </br>
 <strong>Java 11 </strong> </br>
 <strong>Spring-boot 2.7.9 </strong> </br>
 <strong>JPA </strong> </br>
