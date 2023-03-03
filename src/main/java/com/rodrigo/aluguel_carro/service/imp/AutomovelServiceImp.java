@@ -17,6 +17,9 @@ public class AutomovelServiceImp implements AutomovelService {
 
     private AutomovelRepository automovelRepository;
 
+    public AutomovelServiceImp(AutomovelRepository automovelRepository){
+        this.automovelRepository= automovelRepository;
+    }
 
     @Override
     @Transactional
