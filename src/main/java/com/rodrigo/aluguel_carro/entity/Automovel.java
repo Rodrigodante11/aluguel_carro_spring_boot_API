@@ -26,15 +26,24 @@ public class Automovel {
     private String cor;
     @Column(nullable = false,length = 10)
     private String placa;
-    @Column(nullable = true,length = 255)
+    @Column(length = 300)
     private String descricao;
-    @Column(nullable = false)
     private String Ano;
     @Column(name="tipo", nullable = false)
-    @Enumerated(value =  EnumType.STRING )
-    // @Enumerated(value =  EnumType.ORDINAL ) // pega pelo Ordem (0,1)
+    @Enumerated(value =  EnumType.STRING ) // @Enumerated(value =  EnumType.ORDINAL ) // pega pelo Ordem (0,1)
     private TipoCarro tipoCarro;
     @Column(nullable = true)
     private String imagem;
+
+//    @ManyToMany
+//    @JoinTable(name= "locacao",schema = "aluguel_carro",
+//        joinColumns = @JoinColumn(name = "automovel_id", referencedColumnName = "id",nullable = false),
+//
+//            inverseJoinColumns = @JoinColumn( name = "Cliente_id", referencedColumnName = "id",nullable = false)
+//
+//
+//
+//    )
+//    private Set<Cliente> clientes;  // (Set) para  Unicos (List) pra nao valores repetidos
 
 }
