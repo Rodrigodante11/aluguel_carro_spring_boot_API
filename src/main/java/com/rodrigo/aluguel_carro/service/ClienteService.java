@@ -1,6 +1,5 @@
 package com.rodrigo.aluguel_carro.service;
 
-import com.rodrigo.aluguel_carro.entity.Automovel;
 import com.rodrigo.aluguel_carro.entity.Cliente;
 
 import java.util.List;
@@ -19,4 +18,6 @@ public interface ClienteService {
     void validar(Cliente cliente);
 
     Optional<Cliente> obterPorId(Long id);
+
+    List<Cliente> buscarClientesPorNome(String nome);
 }
