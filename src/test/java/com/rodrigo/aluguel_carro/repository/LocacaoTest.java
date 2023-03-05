@@ -164,8 +164,12 @@ public class LocacaoTest {
         Locacao locacao = Criar.locacao();     // primeira locacao a ser salva
         Locacao locacaoNovo = Criar.locacao(); // segunda locacao a ser salva
 
+        Cliente clienteComEmailDiferente = Criar.cliente();
+        clienteComEmailDiferente.setEmail("RodrigoNovoTest@gmail.com");  // 2 e-mais iguais geram erro no sistema de clientes
+
         locacao.setAutomovel(automovel);     // setando o automovel que ira ser buscado
         locacaoNovo.setAutomovel(automovel); // setando o automovel que ira ser buscado
+        locacaoNovo.setCliente(clienteComEmailDiferente);
 
         entityManager.persist(locacao);      // persistindo os dados
         entityManager.persist(locacaoNovo); // persistindo os dados

@@ -2,6 +2,7 @@ package com.rodrigo.aluguel_carro.services;
 
 import com.rodrigo.aluguel_carro.Utils.Criar;
 import com.rodrigo.aluguel_carro.entity.Automovel;
+import com.rodrigo.aluguel_carro.exceptions.ErroAutomovelException;
 import com.rodrigo.aluguel_carro.repository.AutomovelRepository;
 import com.rodrigo.aluguel_carro.service.imp.AutomovelServiceImp;
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.data.domain.Example;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -37,8 +37,10 @@ public class AutomovelServiceTest {
     @Test
     public void deveSalvarUmAutomovel(){
 
+        Automovel automovelASalvar = Criar.automovel();
+
         Assertions.assertDoesNotThrow(() -> {
-            Automovel automovelASalvar = Criar.automovel();
+
 
             Mockito.doNothing().when(automovelServiceImp).validar(automovelASalvar);
 
@@ -59,6 +61,8 @@ public class AutomovelServiceTest {
             assertThat(automovelSalvoImp.getDescricao()).isEqualTo(automovelSalvo.getDescricao());
 
         });
+
+        Mockito.verify(automovelRepository, Mockito.times(1)).save(automovelASalvar);
     }
 
     @Test
@@ -66,7 +70,7 @@ public class AutomovelServiceTest {
         Automovel automovel = Criar.automovel();
         automovel.setId(1L);
 
-        Mockito.doNothing().when(automovelServiceImp).validar(automovel); // mesma classe que estou tentando
+        Mockito.doNothing().when(automovelServiceImp).validar(automovel); // mesma classe que estou testando
 
         automovelServiceImp.atualizar(automovel);
 
@@ -80,7 +84,7 @@ public class AutomovelServiceTest {
         Assertions.assertThrows(NullPointerException.class, () -> {
 
 
-            Mockito.doNothing().when(automovelServiceImp).validar(automovel); // mesma classe que estou tentando
+            Mockito.doNothing().when(automovelServiceImp).validar(automovel); // mesma classe que estou testando
 
             automovelServiceImp.atualizar(automovel);
 
@@ -102,11 +106,7 @@ public class AutomovelServiceTest {
     public void deveLancarUmErroAoTentarDeletarUmAutomovelNaoSalvo(){
         Automovel automovel = Criar.automovel();
 
-        Assertions.assertThrows(NullPointerException.class, () -> {
-
-            automovelServiceImp.deletar(automovel);
-
-        });
+        Assertions.assertThrows(NullPointerException.class, () -> automovelServiceImp.deletar(automovel));
 
         Mockito.verify(automovelRepository, Mockito.never()).delete(automovel);
     }
@@ -114,7 +114,7 @@ public class AutomovelServiceTest {
     @Test
     public void deveObterUmAutomovelPorId(){
         Automovel automovel = Criar.automovel();
-        Long id = 1l;
+        Long id = 1L;
         automovel.setId(id);
 
         // nao quero testar o metodo (findById)
@@ -132,7 +132,7 @@ public class AutomovelServiceTest {
     public void deveBuscarAutomovelPorModelo(){
 
         Automovel automovel = Criar.automovel();
-        automovel.setId(1l);
+        automovel.setId(1L);
 
         List<Automovel> lista = Arrays.asList(automovel); // cast para list
 
@@ -149,10 +149,33 @@ public class AutomovelServiceTest {
     }
 
     @Test
+    public void deveBuscarMaisDeUmAutomovelPorModelo(){
+
+        Automovel automovel = Criar.automovel();
+        automovel.setId(1L);
+
+        Automovel automovelNovo = Criar.automovel();
+        automovelNovo.setId(2L);
+
+        List<Automovel> lista = List.of(automovel,automovelNovo); // cast para list
+
+        // quando chamar o metodo(findAll()) retorna a lista
+        // mockando pois isso eh teste do repository de lancamento
+        Mockito.when(automovelRepository.findAllByModelo(automovel.getModelo())).thenReturn(lista);
+
+        List<Automovel> resultado = automovelServiceImp.obterPorModelo(automovel.getModelo());
+
+        assertThat(automovel).isNotNull();
+        assertThat(resultado.toArray()).isEqualTo(lista.toArray());
+        assertThat(resultado.size()).isEqualTo(2);
+
+    }
+
+    @Test
     public void deveBuscarAutomovelPorMarca(){
 
         Automovel automovel = Criar.automovel();
-        automovel.setId(1l);
+        automovel.setId(1L);
 
         List<Automovel> lista = Arrays.asList(automovel); // cast para list
 
@@ -167,5 +190,194 @@ public class AutomovelServiceTest {
         assertThat(resultado.size()).isEqualTo(1);
 
     }
+    @Test
+    public void deveBuscarMaisdeUmAutomovelPorMarca(){
 
+        Automovel automovel = Criar.automovel();
+        automovel.setId(1L);
+
+        Automovel automovelNovo = Criar.automovel();
+        automovelNovo.setId(2L);
+
+        List<Automovel> lista = Arrays.asList(automovel, automovelNovo); // cast para list
+
+        // quando chamar o metodo(findAll()) retorna a lista
+        // mockando pois isso eh teste do repository de lancamento
+        Mockito.when(automovelRepository.findAllByMarca(automovel.getMarca())).thenReturn(lista);
+
+        List<Automovel> resultado = automovelServiceImp.obterPorMarca(automovel.getMarca());
+
+        assertThat(automovel).isNotNull();
+        assertThat(resultado.toArray()).isEqualTo(lista.toArray());
+        assertThat(resultado.size()).isEqualTo(2);
+
+    }
+    @Test
+    public void deveValidarUmAutomovel(){
+        Assertions.assertDoesNotThrow(() -> {
+            Automovel automovel = Criar.automovel();
+
+            automovelServiceImp.validar(automovel);
+        });
+    }
+    @Test
+    public void deveLancarUmErroValidarUmAutomovelSemMarca(){
+        Automovel automovel = Criar.automovel();
+
+        Throwable exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+
+            automovel.setMarca(null);
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome uma Marca Valida", exception.getMessage());
+
+        exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setMarca("");
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome uma Marca Valida", exception.getMessage());
+
+    }
+
+    @Test
+    public void deveLancarUmErroValidarUmAutomovelSemModelo(){
+        Automovel automovel = Criar.automovel();
+
+        Throwable exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+
+            automovel.setModelo(null);
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome um Modelo Valida", exception.getMessage());
+
+        exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setModelo("");
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome um Modelo Valida", exception.getMessage());
+
+    }
+    @Test
+    public void deveLancarUmErroValidarUmAutomovelSemCor(){
+        Automovel automovel = Criar.automovel();
+
+        Throwable exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setCor(null);
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome uma Cor Valida", exception.getMessage());
+
+        exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setCor("");
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome uma Cor Valida", exception.getMessage());
+
+    }
+    @Test
+    public void deveLancarUmErroValidarUmAutomovelSemPlaca(){
+        Automovel automovel = Criar.automovel();
+
+        Throwable exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setPlaca(null);
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome uma Placa Valida", exception.getMessage());
+
+        exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setPlaca("");
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome uma Placa Valida", exception.getMessage());
+    }
+
+    @Test
+    public void deveLancarUmErroValidarUmAutomovelSemAnoOuAnoInvalido() {
+        Automovel automovel = Criar.automovel();
+
+
+        Throwable exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setAno(null);
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome um Ano Valido", exception.getMessage());
+
+        exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setAno("");
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome um Ano Valido", exception.getMessage());
+
+        exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setAno("333");
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome um Ano Valido", exception.getMessage());
+
+        exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setAno("18");
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome um Ano Valido", exception.getMessage());
+
+        exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setAno("20222");
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome um Ano Valido", exception.getMessage());
+
+    }
+    @Test
+    public void deveLancarUmErroValidarUmAutomovelTipoAutomovel() {
+        Automovel automovel = Criar.automovel();
+        Throwable exception = Assertions.assertThrows(ErroAutomovelException.class, () -> {
+
+            automovel.setTipoCarro(null);
+
+            automovelServiceImp.validar(automovel);
+
+        });
+        Assertions.assertEquals("Infome o Tipo do Automovel", exception.getMessage());
+    }
 }
+
+

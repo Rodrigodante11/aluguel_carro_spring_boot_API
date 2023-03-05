@@ -74,6 +74,11 @@ public class ClienteServiceImp implements ClienteService {
 
     @Override
     public void validarEmail(Cliente cliente) {
+
+        if(cliente.getEmail() == null || cliente.getEmail().trim().equals("")){
+            throw new ErroClienteException("Informe um Email");
+        }
+
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(cliente.getEmail());
@@ -86,9 +91,7 @@ public class ClienteServiceImp implements ClienteService {
         if (!matcher.matches()) {
             throw new ErroClienteException("Email Invalido");
         }
-        if(cliente.getEmail() == null || cliente.getEmail().trim().equals("")){
-            throw new ErroClienteException("Informe um Email");
-        }
+
     }
 
     @Override
