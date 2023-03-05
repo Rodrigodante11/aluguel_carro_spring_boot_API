@@ -61,4 +61,14 @@ public class LocacaoServiceImp implements LocacaoService {
     public void validar(Locacao locacao) {
 
     }
+
+    @Override
+    public List<Locacao> suscarTodosPorClienteId(Long id) {
+        return locacaoRepository.findAllByCliente_Id(id);
+    }
+
+    @Override
+    public List<Locacao> suscarTodosPorAutomovelId(Long id) {
+        return locacaoRepository.findAllByAutomovel_Id(id);
+    }
 }

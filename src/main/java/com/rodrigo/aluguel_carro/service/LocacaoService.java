@@ -16,4 +16,8 @@ public interface LocacaoService {
     List<Locacao> buscar(Locacao locacao);
 
     void validar(Locacao locacao);
+
+    List<Locacao> suscarTodosPorClienteId(Long id);
+
+    List<Locacao> suscarTodosPorAutomovelId(Long id);
 }

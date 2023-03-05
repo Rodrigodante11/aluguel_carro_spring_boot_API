@@ -18,6 +18,7 @@ public class ClienteServiceImp implements ClienteService {
     private ClienteRepository clienteRepository;
 
     public ClienteServiceImp(ClienteRepository clienteRepository){
+
         this.clienteRepository = clienteRepository;
     }
     @Override
@@ -64,6 +65,7 @@ public class ClienteServiceImp implements ClienteService {
 
     @Override
     public Optional<Cliente> obterPorId(Long id) {
+
         return clienteRepository.findById(id);
     }
 
