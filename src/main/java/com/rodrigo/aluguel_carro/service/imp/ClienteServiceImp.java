@@ -1,12 +1,15 @@
 package com.rodrigo.aluguel_carro.service.imp;
 
 import com.rodrigo.aluguel_carro.entity.Cliente;
+import com.rodrigo.aluguel_carro.exceptions.ErroClienteException;
 import com.rodrigo.aluguel_carro.repository.ClienteRepository;
 import com.rodrigo.aluguel_carro.service.ClienteService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import java.util.List;
 import java.util.Objects;
@@ -59,11 +62,6 @@ public class ClienteServiceImp implements ClienteService {
     }
 
     @Override
-    public void validar(Cliente cliente) {
-
-    }
-
-    @Override
     public Optional<Cliente> obterPorId(Long id) {
 
         return clienteRepository.findById(id);
@@ -72,5 +70,35 @@ public class ClienteServiceImp implements ClienteService {
     @Override
     public List<Cliente> buscarClientesPorNome(String nome) {
         return clienteRepository.findAllByNomeContaining(nome);
+    }
+
+    @Override
+    public void validar(Cliente cliente) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(cliente.getEmail());
+
+        if (!matcher.matches()) {
+            throw new ErroClienteException("Email Invalido");
+        }
+        if(cliente.getNome() == null || cliente.getNome().trim().equals("")){
+            throw new ErroClienteException("Informe um nome Valido");
+        }
+        if(cliente.getIdade() == null || cliente.getIdade() == 0){
+            throw new ErroClienteException("Informe uma Idade Valida");
+        }
+        if(cliente.getEmail() == null || cliente.getEmail().trim().equals("")){
+            throw new ErroClienteException("Informe um Email");
+        }
+        if(cliente.getCpf() == null || cliente.getCpf().trim().equals("") || cliente.getCpf().length() != 11){
+            throw new ErroClienteException("Informe CPF Valido");
+        }
+        if(cliente.getCidade() == null || cliente.getCidade().trim().equals("")){
+            throw new ErroClienteException("Informe uma Cidade Valida");
+        }
+        if(cliente.getEstado() == null || cliente.getEstado().trim().equals("")){
+            throw new ErroClienteException("Informe um Estado Valido");
+        }
+
     }
 }
