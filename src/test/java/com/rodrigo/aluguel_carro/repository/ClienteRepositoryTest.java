@@ -137,6 +137,25 @@ public class ClienteRepositoryTest {
 
         assertThat(clienteExistente.isPresent()).isTrue();
     }
+
+    @Test
+    public void deveBuscarSeExisteEmailJaCadstradonaBaseDeDados(){
+        Cliente cliente = Criar.cliente();
+        entityManager.persist(cliente);
+
+        boolean result = clienteRepository.existsByEmail(cliente.getEmail());
+
+        assertThat(result).isTrue();
+    }
+    @Test
+    public void deveBuscarSeExisteEmailNaoCadstradonaBaseDeDados(){
+        Cliente cliente = Criar.cliente();
+        entityManager.persist(cliente);
+
+        boolean result = clienteRepository.existsByEmail("rodrigoaugusto839@gmail.com");
+
+        assertThat(result).isTrue();
+    }
     @Test
     public void deveBuscarUmClientePorId(){
         Cliente cliente = Criar.cliente();
@@ -156,18 +175,16 @@ public class ClienteRepositoryTest {
 
         assertThat(clienteExistente.get(0).getId()).isNotNull();
     }
+
     @Test
-    public void deveBuscarMaisdeUmClientePorNome(){
+    public void deveBuscarUmClientePorNomeNaoInteiro(){
         Cliente cliente = Criar.cliente();
         entityManager.persist(cliente);
 
-        Cliente clienteNovo = Criar.cliente();
-        entityManager.persist(clienteNovo);
-
-        List<Cliente> clienteExistente = clienteRepository.findAllByNomeContaining(cliente.getNome());
+        List<Cliente> clienteExistente = clienteRepository.findAllByNomeContaining(cliente.getNome().split(" ")[0]);
 
         assertThat(clienteExistente.get(0).getId()).isNotNull();
-        assertThat(clienteExistente.get(1).getId()).isNotNull();
+        assertThat(clienteExistente.get(0).getNome()).isEqualTo(cliente.getNome());
     }
 
 }

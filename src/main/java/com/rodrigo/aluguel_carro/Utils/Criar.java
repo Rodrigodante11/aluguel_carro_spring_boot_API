@@ -28,7 +28,7 @@ public class Criar {
     }
     public static Cliente cliente(){
         return Cliente.builder()
-                .nome("rodrigoaugusto839@gmail.com")
+                .nome("Rodrigo Augusto de Oliveira")
                 .idade(20)
                 .email("rodrigoaugusto839@gmail.com")
                 .cpf("12345678944")
