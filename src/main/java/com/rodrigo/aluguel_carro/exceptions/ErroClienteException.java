@@ -4,4 +4,6 @@ public class ErroClienteException extends RuntimeException{
     public ErroClienteException(String msg){
         super(msg);
     }
+
+
 }

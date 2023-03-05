@@ -8,4 +8,6 @@ import java.util.List;
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     List<Cliente> findAllByNomeContaining(String nome);
+
+    boolean existsByEmail(String email);
 }

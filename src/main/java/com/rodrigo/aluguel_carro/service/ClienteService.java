@@ -20,4 +20,6 @@ public interface ClienteService {
     Optional<Cliente> obterPorId(Long id);
 
     List<Cliente> buscarClientesPorNome(String nome);
+
+    void validarEmail(Cliente cliente);
 }

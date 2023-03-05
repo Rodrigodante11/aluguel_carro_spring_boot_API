@@ -73,22 +73,32 @@ public class ClienteServiceImp implements ClienteService {
     }
 
     @Override
-    public void validar(Cliente cliente) {
+    public void validarEmail(Cliente cliente) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(cliente.getEmail());
 
+        boolean existe = clienteRepository.existsByEmail(cliente.getEmail());
+
+        if(existe){
+            throw new ErroClienteException("Ja existe um Cliente cadastrado com este email");
+        }
         if (!matcher.matches()) {
             throw new ErroClienteException("Email Invalido");
         }
+        if(cliente.getEmail() == null || cliente.getEmail().trim().equals("")){
+            throw new ErroClienteException("Informe um Email");
+        }
+    }
+
+    @Override
+    public void validar(Cliente cliente) {
+
         if(cliente.getNome() == null || cliente.getNome().trim().equals("")){
             throw new ErroClienteException("Informe um nome Valido");
         }
         if(cliente.getIdade() == null || cliente.getIdade() == 0){
             throw new ErroClienteException("Informe uma Idade Valida");
-        }
-        if(cliente.getEmail() == null || cliente.getEmail().trim().equals("")){
-            throw new ErroClienteException("Informe um Email");
         }
         if(cliente.getCpf() == null || cliente.getCpf().trim().equals("") || cliente.getCpf().length() != 11){
             throw new ErroClienteException("Informe CPF Valido");
@@ -99,6 +109,6 @@ public class ClienteServiceImp implements ClienteService {
         if(cliente.getEstado() == null || cliente.getEstado().trim().equals("")){
             throw new ErroClienteException("Informe um Estado Valido");
         }
-
+        validarEmail(cliente);
     }
 }
