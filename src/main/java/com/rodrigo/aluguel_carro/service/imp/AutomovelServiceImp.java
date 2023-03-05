@@ -1,8 +1,10 @@
 package com.rodrigo.aluguel_carro.service.imp;
 
 import com.rodrigo.aluguel_carro.entity.Automovel;
+import com.rodrigo.aluguel_carro.exceptions.ErroAutomovelException;
 import com.rodrigo.aluguel_carro.repository.AutomovelRepository;
 import com.rodrigo.aluguel_carro.service.AutomovelService;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -59,11 +61,6 @@ public class AutomovelServiceImp implements AutomovelService {
     }
 
     @Override
-    public void validar(Automovel automovel) {
-
-    }
-
-    @Override
     public Optional<Automovel> obterPorId(Long id) {  // encontrar Automovel por Id
         return automovelRepository.findById(id);
     }
@@ -76,5 +73,26 @@ public class AutomovelServiceImp implements AutomovelService {
     @Override
     public List<Automovel>  obterPorModelo(String modelo) {
         return automovelRepository.findAllByModelo(modelo);
+    }
+    @Override
+    public void validar(Automovel automovel) {
+        if(automovel.getMarca() == null || automovel.getMarca().trim().equals("")){
+            throw new ErroAutomovelException("Infome uma Marca Valida");
+        }
+        if(automovel.getModelo() == null || automovel.getModelo().trim().equals("")){
+            throw new ErroAutomovelException("Infome um Modelo Valida");
+        }
+        if(automovel.getCor() == null || automovel.getCor().trim().equals("")){
+            throw new ErroAutomovelException("Infome uma Cor Valida");
+        }
+        if(automovel.getPlaca() == null || automovel.getPlaca().trim().equals("")){
+            throw new ErroAutomovelException("Infome uma Placa Valida");
+        }
+        if(automovel.getAno() == null || automovel.getAno().trim().equals("") || automovel.getAno().length() !=4){
+            throw new ErroAutomovelException("Infome um Ano Valido");
+        }
+        if(automovel.getTipoCarro() == null){
+            throw new ErroAutomovelException("Infome o Tipo do Automovel");
+        }
     }
 }

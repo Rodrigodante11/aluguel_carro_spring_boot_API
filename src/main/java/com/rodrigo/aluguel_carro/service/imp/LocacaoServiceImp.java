@@ -1,6 +1,7 @@
 package com.rodrigo.aluguel_carro.service.imp;
 
 import com.rodrigo.aluguel_carro.entity.Locacao;
+import com.rodrigo.aluguel_carro.exceptions.ErroClienteException;
 import com.rodrigo.aluguel_carro.repository.LocacaoRepository;
 import com.rodrigo.aluguel_carro.service.LocacaoService;
 import org.springframework.data.domain.Example;
@@ -59,7 +60,21 @@ public class LocacaoServiceImp implements LocacaoService {
 
     @Override
     public void validar(Locacao locacao) {
-
+        if(locacao.getLocacaoKM() == null || locacao.getLocacaoKM().trim().equals("")){
+            throw new ErroClienteException("Informe o KM da Locação");
+        }
+        if(locacao.getValor() == 0 || locacao.getValor().isNaN()){
+            throw new ErroClienteException("Informe um Valor Valido da Locação");
+        }
+        if(locacao.getDataLocacao() == null ){
+            throw new ErroClienteException("Erro ao tentar Cadastrar a Data de Locao , informe ao Desenvovedor");
+        }
+        if(locacao.getCliente()== null || locacao.getCliente().getId() ==null){
+            throw new ErroClienteException("Informe um Cliente Valido para Locação");
+        }
+        if(locacao.getAutomovel()== null || locacao.getAutomovel().getId() ==null){
+            throw new ErroClienteException("Informe um Automovel Valido para Locação");
+        }
     }
 
     @Override
