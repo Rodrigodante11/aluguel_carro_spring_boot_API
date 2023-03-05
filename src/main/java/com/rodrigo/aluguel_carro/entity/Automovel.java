@@ -28,12 +28,13 @@ public class Automovel {
     private String placa;
     @Column(length = 300)
     private String descricao;
+    @Column(nullable = false,length = 4)
     private String Ano;
+    private String imagem;
+
     @Column(name="tipo", nullable = false)
     @Enumerated(value =  EnumType.STRING ) // @Enumerated(value =  EnumType.ORDINAL ) // pega pelo Ordem (0,1)
     private TipoCarro tipoCarro;
-    @Column(nullable = true)
-    private String imagem;
 
 //    @ManyToMany
 //    @JoinTable(name= "locacao",schema = "aluguel_carro",

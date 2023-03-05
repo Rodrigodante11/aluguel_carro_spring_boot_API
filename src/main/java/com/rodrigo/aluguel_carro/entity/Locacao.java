@@ -1,7 +1,6 @@
 package com.rodrigo.aluguel_carro.entity;
 
 import lombok.*;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -20,19 +19,21 @@ public class Locacao {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String locacao_km;
-    @Column(precision = 2)
-    private double valor;
+    @Column(name = "locacao_km", nullable = false)
+    private String locacaoKM;
+    @Column(precision = 2, nullable = false)
+    private Double valor;
 
-    @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
-    private LocalDate data_locacao;
 
-    @ManyToOne
-    @JoinColumn(name = "automovel_id")
+    @Column(name = "data_locacao", nullable = false)
+    private LocalDate dataLocacao;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "automovel_id" , nullable = false)
     private Automovel automovel;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
 }

@@ -1,6 +1,5 @@
 package com.rodrigo.aluguel_carro.service.imp;
 
-import com.rodrigo.aluguel_carro.entity.Automovel;
 import com.rodrigo.aluguel_carro.entity.Cliente;
 import com.rodrigo.aluguel_carro.repository.ClienteRepository;
 import com.rodrigo.aluguel_carro.service.ClienteService;
@@ -66,5 +65,10 @@ public class ClienteServiceImp implements ClienteService {
     @Override
     public Optional<Cliente> obterPorId(Long id) {
         return clienteRepository.findById(id);
+    }
+
+    @Override
+    public List<Cliente> buscarClientesPorNome(String nome) {
+        return clienteRepository.findAllByNomeContaining(nome);
     }
 }

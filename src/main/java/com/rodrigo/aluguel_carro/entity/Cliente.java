@@ -3,7 +3,7 @@ package com.rodrigo.aluguel_carro.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -22,7 +22,7 @@ public class Cliente {
     private String nome;
 
     @Column(nullable = false )
-    private int idade;
+    private Integer idade;
 
     @Column(nullable = false ,length = 100)
     private String email;
@@ -30,13 +30,14 @@ public class Cliente {
     @Column(nullable = false ,length = 20)
     private String cpf;
 
-    @Column(length = 100)
-    private String endereco_rua;
+    @Column(length = 100, name = "endereco_rua")
+    private String enderecoRua;
 
-    private int endereco_numero;
+    @Column(name = "endereco_numero")
+    private int enderecoNumero;
 
-    @Column(length = 100)
-    private String endereco_complemento;
+    @Column(length = 100, name = "endereco_complemento")
+    private String enderecoComplemento;
 
     @Column(nullable = false ,length = 100)
     private String cidade;
@@ -44,7 +45,8 @@ public class Cliente {
     @Column(nullable = false ,length = 100)
     private String estado;
 
-    private Date data_cadastro;
+    @Column(name = "data_cadastro")
+    private LocalDate dataCadastro;
 
 //    @ManyToMany(mappedBy = "clientes") // esta sendo mapeado pelo clientes la em Automoveis
 //    private Set<Automovel> automoveis; // (Set) para  Unicos (List) pra nao valores repetidos
