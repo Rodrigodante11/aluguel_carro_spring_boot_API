@@ -9,6 +9,6 @@ public interface AutomovelRepository extends JpaRepository<Automovel, Long> {
 
     List<Automovel> findAllByMarca(String marca);
 
-    List<Automovel> findAllByModelo(String marca);
+    List<Automovel> findAllByModelo(String modelo);
 
 }
