@@ -137,8 +137,7 @@ public class AutomovelServiceTest {
         List<Automovel> lista = Arrays.asList(automovel); // cast para list
 
         // quando chamar o metodo(findAll()) retorna a lista
-        // mockando pois isso eh teste do repository de lancamento
-        Mockito.when(automovelRepository.findAllByModelo(automovel.getModelo())).thenReturn(lista);
+        Mockito.when(automovelRepository.findAllByModeloContaining(automovel.getModelo())).thenReturn(lista);
 
         List<Automovel> resultado = automovelServiceImp.obterPorModelo(automovel.getModelo());
 
@@ -160,8 +159,7 @@ public class AutomovelServiceTest {
         List<Automovel> lista = List.of(automovel,automovelNovo); // cast para list
 
         // quando chamar o metodo(findAll()) retorna a lista
-        // mockando pois isso eh teste do repository de lancamento
-        Mockito.when(automovelRepository.findAllByModelo(automovel.getModelo())).thenReturn(lista);
+        Mockito.when(automovelRepository.findAllByModeloContaining(automovel.getModelo())).thenReturn(lista);
 
         List<Automovel> resultado = automovelServiceImp.obterPorModelo(automovel.getModelo());
 
@@ -180,8 +178,7 @@ public class AutomovelServiceTest {
         List<Automovel> lista = Arrays.asList(automovel); // cast para list
 
         // quando chamar o metodo(findAll()) retorna a lista
-        // mockando pois isso eh teste do repository de lancamento
-        Mockito.when(automovelRepository.findAllByMarca(automovel.getMarca())).thenReturn(lista);
+        Mockito.when(automovelRepository.findAllByMarcaContaining(automovel.getMarca())).thenReturn(lista);
 
         List<Automovel> resultado = automovelServiceImp.obterPorMarca(automovel.getMarca());
 
@@ -202,8 +199,7 @@ public class AutomovelServiceTest {
         List<Automovel> lista = Arrays.asList(automovel, automovelNovo); // cast para list
 
         // quando chamar o metodo(findAll()) retorna a lista
-        // mockando pois isso eh teste do repository de lancamento
-        Mockito.when(automovelRepository.findAllByMarca(automovel.getMarca())).thenReturn(lista);
+        Mockito.when(automovelRepository.findAllByMarcaContaining(automovel.getMarca())).thenReturn(lista);
 
         List<Automovel> resultado = automovelServiceImp.obterPorMarca(automovel.getMarca());
 

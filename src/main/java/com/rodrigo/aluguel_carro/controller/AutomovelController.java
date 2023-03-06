@@ -36,14 +36,14 @@ public class AutomovelController {
     @GetMapping("{id}")
     public ResponseEntity<?> obterAutomovelPorId(@PathVariable("id") Long id){
         return automovelService.obterPorId(id)
-                .map( lancamneto -> new ResponseEntity(
-                                Converter.automovel(lancamneto), HttpStatus.OK
+                .map( automovel -> new ResponseEntity(
+                                Converter.automovel(automovel), HttpStatus.OK
                         )
-                ).orElseGet( () -> new ResponseEntity<>("Automovel Nao encontradoe", HttpStatus.NOT_FOUND ));
+                ).orElseGet( () -> new ResponseEntity<>("Automovel Não encontrado", HttpStatus.NOT_FOUND ));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> atualizar( @PathVariable("id") Long id, @RequestBody AutomovelDTO automovelDTO ) {
+    public ResponseEntity<?> atualizarAutomovel( @PathVariable("id") Long id, @RequestBody AutomovelDTO automovelDTO ) {
         return automovelService.obterPorId(id).map( entity -> {
 
             try {
@@ -60,12 +60,12 @@ public class AutomovelController {
     }
 
     @DeleteMapping("{id}") // para atualizar @PutMapping("{id}") com o ID do Objeto a ser atualizado
-    public ResponseEntity<?> deletar(@PathVariable("id") Long id ){
-        return automovelService.obterPorId(id).map( entidade -> {
-            automovelService.deletar(entidade);
+    public ResponseEntity<?> deletarAutomovel(@PathVariable("id") Long id ){
+        return automovelService.obterPorId(id).map( automovel -> {
+            automovelService.deletar(automovel);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }).orElseGet( () ->
-                new ResponseEntity<>("Automovel nao encontrado na base de dados", HttpStatus.BAD_REQUEST)
+                new ResponseEntity<>("Automovel não encontrado na base de dados", HttpStatus.BAD_REQUEST)
         );
     }
 
@@ -77,7 +77,7 @@ public class AutomovelController {
 
             if (listAutomovelEncontrado.isEmpty()) {
                 return ResponseEntity.badRequest().body(
-                        "Nao foi possivel realizar a consulta, Automovel nao encontrado pela Marca informada");
+                        "Não foi possivel realizar a consulta, Automovel não encontrado pela Marca informada");
             }
 
             List<AutomovelDTO> listDTOAutomovelEncontrado = Converter.automovel(listAutomovelEncontrado);
@@ -97,7 +97,7 @@ public class AutomovelController {
 
             if (listAutomovelEncontrado.isEmpty()) {
                 return ResponseEntity.badRequest().body(
-                        "Nao foi possivel realizar a consulta, Automovel nao encontrado pelo Modelo informada");
+                        "Nao foi possivel realizar a consulta, Automovel não encontrado pelo Modelo informada");
             }
 
             List<AutomovelDTO> listDTOAutomovelEncontrado = Converter.automovel(listAutomovelEncontrado);

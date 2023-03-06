@@ -155,7 +155,7 @@ public class AutomovelRepositoryTest {
         Automovel automovel = Criar.automovel();
         entityManager.persist(automovel);
 
-        List<Automovel> automovelExistente = automovelRepository.findAllByModelo(automovel.getModelo());
+        List<Automovel> automovelExistente = automovelRepository.findAllByModeloContaining(automovel.getModelo());
 
         assertThat(automovelExistente.get(0).getId()).isNotNull();
 
@@ -168,7 +168,7 @@ public class AutomovelRepositoryTest {
         Automovel automovelNovo = Criar.automovel();
         entityManager.persist(automovelNovo);
 
-        List<Automovel> automovelExistente = automovelRepository.findAllByModelo(automovel.getModelo());
+        List<Automovel> automovelExistente = automovelRepository.findAllByModeloContaining(automovel.getModelo());
 
         assertThat(automovelExistente.get(0).getId()).isNotNull();
         assertThat(automovelExistente.get(1).getId()).isNotNull();
@@ -183,7 +183,7 @@ public class AutomovelRepositoryTest {
         Automovel automovelNovo = Criar.automovel();
         entityManager.persist(automovelNovo);
 
-        List<Automovel> automovelExistente = automovelRepository.findAllByMarca(automovel.getMarca());
+        List<Automovel> automovelExistente = automovelRepository.findAllByMarcaContaining(automovel.getMarca());
 
         assertThat(automovelExistente.get(0).getId()).isNotNull();
 
@@ -197,7 +197,7 @@ public class AutomovelRepositoryTest {
         Automovel automovelNovo = Criar.automovel();
         entityManager.persist(automovelNovo);
 
-        List<Automovel> automovelExistente = automovelRepository.findAllByMarca(automovel.getMarca());
+        List<Automovel> automovelExistente = automovelRepository.findAllByMarcaContaining(automovel.getMarca());
 
         assertThat(automovelExistente.get(0).getId()).isNotNull();
         assertThat(automovelExistente.get(1).getId()).isNotNull();

@@ -67,12 +67,12 @@ public class AutomovelServiceImp implements AutomovelService {
 
     @Override
     public List<Automovel> obterPorMarca(String marca) {
-        return automovelRepository.findAllByMarca(marca);
+        return automovelRepository.findAllByMarcaContaining(marca);
     }
 
     @Override
     public List<Automovel>  obterPorModelo(String modelo) {
-        return automovelRepository.findAllByModelo(modelo);
+        return automovelRepository.findAllByModeloContaining(modelo);
     }
     @Override
     public void validar(Automovel automovel) {
