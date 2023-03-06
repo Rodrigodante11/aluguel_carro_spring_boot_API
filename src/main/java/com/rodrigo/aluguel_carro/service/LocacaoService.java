@@ -4,6 +4,7 @@ import com.rodrigo.aluguel_carro.entity.Automovel;
 import com.rodrigo.aluguel_carro.entity.Locacao;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LocacaoService {
 
@@ -17,7 +18,9 @@ public interface LocacaoService {
 
     void validar(Locacao locacao);
 
-    List<Locacao> suscarTodosPorClienteId(Long id);
+    List<Locacao> buscarTodosPorClienteId(Long id);
 
-    List<Locacao> suscarTodosPorAutomovelId(Long id);
+    List<Locacao> buscarTodosPorAutomovelId(Long id);
+
+    Optional<Locacao> obterPorId(Long id);
 }
