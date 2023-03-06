@@ -2,8 +2,10 @@ package com.rodrigo.aluguel_carro.Utils;
 
 import com.rodrigo.aluguel_carro.dto.AutomovelDTO;
 import com.rodrigo.aluguel_carro.dto.ClienteDTO;
+import com.rodrigo.aluguel_carro.dto.LocacaoDTO;
 import com.rodrigo.aluguel_carro.entity.Automovel;
 import com.rodrigo.aluguel_carro.entity.Cliente;
+import com.rodrigo.aluguel_carro.entity.Locacao;
 import com.rodrigo.aluguel_carro.enums.TipoCarro;
 import lombok.experimental.UtilityClass;
 
@@ -119,6 +121,28 @@ public class Converter {
         }).collect(Collectors.toList());
 
         return collect;
+    }
+
+    public static Locacao locacao(LocacaoDTO locacaoDTO){
+
+        return Locacao.builder()
+                .id(locacaoDTO.getId())
+                .valor(locacaoDTO.getValor())
+                .locacaoKM(locacaoDTO.getLocacaoKM())
+                .dataLocacao(LocalDate.now())
+                .build();
+    }
+
+    public static LocacaoDTO locacao(Locacao locacao){
+
+        return LocacaoDTO.builder()
+                .id(locacao.getId())
+                .valor(locacao.getValor())
+                .cliente(locacao.getCliente().getId())
+                .automovel(locacao.getAutomovel().getId())
+                .locacaoKM(locacao.getLocacaoKM())
+                .dataLocacao(LocalDate.now())
+                .build();
     }
 
 }

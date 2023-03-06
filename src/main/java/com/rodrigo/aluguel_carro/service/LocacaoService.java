@@ -1,6 +1,5 @@
 package com.rodrigo.aluguel_carro.service;
 
-import com.rodrigo.aluguel_carro.entity.Automovel;
 import com.rodrigo.aluguel_carro.entity.Locacao;
 
 import java.util.List;
@@ -23,4 +22,6 @@ public interface LocacaoService {
     List<Locacao> buscarTodosPorAutomovelId(Long id);
 
     Optional<Locacao> obterPorId(Long id);
+
+    List<Locacao>  obterTodos();
 }

@@ -92,4 +92,9 @@ public class LocacaoServiceImp implements LocacaoService {
     public Optional<Locacao> obterPorId(Long id) {
         return locacaoRepository.findById(id);
     }
+
+    @Override
+    public List<Locacao> obterTodos() {
+        return locacaoRepository.findAll();
+    }
 }

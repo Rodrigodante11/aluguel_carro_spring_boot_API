@@ -42,6 +42,18 @@ public class AutomovelController {
                 ).orElseGet( () -> new ResponseEntity<>("Automovel Não encontrado", HttpStatus.NOT_FOUND ));
     }
 
+    @GetMapping()
+    public ResponseEntity<?> obterTodosAutomoveis(){
+        try{
+            List<Automovel> automovelEntidade =  automovelService.obterTodos();
+
+            return new ResponseEntity<>(automovelEntidade, HttpStatus.CREATED);
+
+        }catch(ErroAutomovelException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<?> atualizarAutomovel( @PathVariable("id") Long id, @RequestBody AutomovelDTO automovelDTO ) {
         return automovelService.obterPorId(id).map( entity -> {

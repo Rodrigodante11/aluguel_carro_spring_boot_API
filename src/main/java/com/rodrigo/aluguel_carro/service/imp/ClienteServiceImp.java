@@ -95,6 +95,11 @@ public class ClienteServiceImp implements ClienteService {
     }
 
     @Override
+    public List<Cliente> obterTodos() {
+        return clienteRepository.findAll();
+    }
+
+    @Override
     public void validar(Cliente cliente) {
 
         if(cliente.getNome() == null || cliente.getNome().trim().equals("")){

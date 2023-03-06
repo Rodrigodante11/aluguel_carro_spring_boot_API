@@ -4,7 +4,6 @@ import com.rodrigo.aluguel_carro.entity.Automovel;
 import com.rodrigo.aluguel_carro.exceptions.ErroAutomovelException;
 import com.rodrigo.aluguel_carro.repository.AutomovelRepository;
 import com.rodrigo.aluguel_carro.service.AutomovelService;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -74,6 +73,12 @@ public class AutomovelServiceImp implements AutomovelService {
     public List<Automovel>  obterPorModelo(String modelo) {
         return automovelRepository.findAllByModeloContaining(modelo);
     }
+
+    @Override
+    public List<Automovel> obterTodos() {
+        return automovelRepository.findAll();
+    }
+
     @Override
     public void validar(Automovel automovel) {
         if(automovel.getMarca() == null || automovel.getMarca().trim().equals("")){
