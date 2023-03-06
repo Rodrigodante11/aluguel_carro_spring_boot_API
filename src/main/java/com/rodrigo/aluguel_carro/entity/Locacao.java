@@ -24,15 +24,14 @@ public class Locacao {
     @Column(precision = 2, nullable = false)
     private Double valor;
 
-
     @Column(name = "data_locacao", nullable = false)
     private LocalDate dataLocacao;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "automovel_id" , nullable = false)
     private Automovel automovel;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 

@@ -1,7 +1,5 @@
 package com.rodrigo.aluguel_carro.dto;
 
-import com.rodrigo.aluguel_carro.entity.Automovel;
-import com.rodrigo.aluguel_carro.entity.Cliente;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,7 +16,7 @@ public class LocacaoDTO {
     private String locacaoKM;
     private Double valor;
     private LocalDate dataLocacao;
-    private Automovel automovel;
-    private Cliente cliente;
+    private Long automovel;
+    private Long cliente;
 
 }

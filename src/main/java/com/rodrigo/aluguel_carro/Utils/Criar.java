@@ -46,8 +46,6 @@ public class Criar {
                 .locacaoKM("5000KM")
                 .valor(10000.0)
                 .dataLocacao(LocalDate.now())
-                .automovel(automovel())
-                .cliente(cliente())
                 .build();
     }
 }

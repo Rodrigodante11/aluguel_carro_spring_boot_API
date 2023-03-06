@@ -43,6 +43,18 @@ public class ClienteController {
                 ).orElseGet( () -> new ResponseEntity<>("Cliente Não encontrado", HttpStatus.NOT_FOUND ));
     }
 
+    @GetMapping()
+    public ResponseEntity<?> obterTodosAClientes(){
+        try{
+            List<Cliente> clienteEntidade =  clienteService.obterTodos();
+
+            return new ResponseEntity<>(clienteEntidade, HttpStatus.CREATED);
+
+        }catch(ErroClienteException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<?> atualizarCliente( @PathVariable("id") Long id, @RequestBody ClienteDTO clienteDTO ) {
         return clienteService.obterPorId(id).map( entity -> {

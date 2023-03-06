@@ -22,4 +22,6 @@ public interface ClienteService {
     List<Cliente> buscarClientesPorNome(String nome);
 
     void validarEmail(Cliente cliente);
+
+    List<Cliente>  obterTodos();
 }

@@ -23,4 +23,6 @@ public interface AutomovelService {
 
     List<Automovel>  obterPorModelo(String modelo);
 
+    List<Automovel>  obterTodos();
+
 }
