@@ -16,10 +16,10 @@ public class Criar {
         return Automovel.builder()
                 .marca("Ford Mustang")
                 .modelo("Shelby GT500")
-                .Ano("2005")
+                .ano("2005")
                 .cor("Branco")
                 .placa("1111LL")
-                .imagem("img/mustang.jpp")
+                .imagem("img/mustang.jpg")
                 .tipoCarro(TipoCarro.ESPORTIVO)
                 .descricao("O Ford Mustang Shelby GT500 é um versão esportiva da série Mustang da Ford. " +
                         "Preparado pela Shelby American o Mustang Shelby GT500 é a versão mais potente de cada geração " +

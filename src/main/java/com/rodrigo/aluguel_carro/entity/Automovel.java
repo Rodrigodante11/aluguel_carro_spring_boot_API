@@ -29,7 +29,7 @@ public class Automovel {
     @Column(length = 300)
     private String descricao;
     @Column(nullable = false,length = 4)
-    private String Ano;
+    private String ano;
     private String imagem;
 
     @Column(name="tipo", nullable = false)
