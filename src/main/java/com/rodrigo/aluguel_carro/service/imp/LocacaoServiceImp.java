@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class LocacaoServiceImp implements LocacaoService {
@@ -78,12 +79,17 @@ public class LocacaoServiceImp implements LocacaoService {
     }
 
     @Override
-    public List<Locacao> suscarTodosPorClienteId(Long id) {
+    public List<Locacao> buscarTodosPorClienteId(Long id) {
         return locacaoRepository.findAllByCliente_Id(id);
     }
 
     @Override
-    public List<Locacao> suscarTodosPorAutomovelId(Long id) {
+    public List<Locacao> buscarTodosPorAutomovelId(Long id) {
         return locacaoRepository.findAllByAutomovel_Id(id);
+    }
+
+    @Override
+    public Optional<Locacao> obterPorId(Long id) {
+        return locacaoRepository.findById(id);
     }
 }
