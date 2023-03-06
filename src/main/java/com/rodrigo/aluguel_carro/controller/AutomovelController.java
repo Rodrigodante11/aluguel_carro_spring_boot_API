@@ -5,6 +5,8 @@ import com.rodrigo.aluguel_carro.dto.AutomovelDTO;
 import com.rodrigo.aluguel_carro.entity.Automovel;
 import com.rodrigo.aluguel_carro.exceptions.ErroAutomovelException;
 import com.rodrigo.aluguel_carro.service.AutomovelService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/automovel")
 @RequiredArgsConstructor
+@Api(value = "API REST Automovel")
+@CrossOrigin(origins = "*")
 public class AutomovelController {
 
     private final AutomovelService automovelService;
 
+    @ApiOperation(value = "Salva Automovel")
     @PostMapping()
     public ResponseEntity<?> salvarAutomovel(@RequestBody AutomovelDTO automovelDTO){
         try{
@@ -33,6 +38,7 @@ public class AutomovelController {
 
     }
 
+    @ApiOperation(value = "Obter Automovel Por ID")
     @GetMapping("{id}")
     public ResponseEntity<?> obterAutomovelPorId(@PathVariable("id") Long id){
         return automovelService.obterPorId(id)
@@ -42,6 +48,7 @@ public class AutomovelController {
                 ).orElseGet( () -> new ResponseEntity<>("Automovel Não encontrado", HttpStatus.NOT_FOUND ));
     }
 
+    @ApiOperation(value = "Obeter Todos Automoveis")
     @GetMapping()
     public ResponseEntity<?> obterTodosAutomoveis(){
         try{
@@ -54,6 +61,7 @@ public class AutomovelController {
         }
     }
 
+    @ApiOperation(value = "Atualizar Automovel Por ID")
     @PutMapping("{id}")
     public ResponseEntity<?> atualizarAutomovel( @PathVariable("id") Long id, @RequestBody AutomovelDTO automovelDTO ) {
         return automovelService.obterPorId(id).map( entity -> {
@@ -71,6 +79,7 @@ public class AutomovelController {
                 new ResponseEntity<>("Automovel não encontrado na base de Dados.", HttpStatus.BAD_REQUEST) );
     }
 
+    @ApiOperation(value = "Deletar Automovel Por ID")
     @DeleteMapping("{id}") // para atualizar @PutMapping("{id}") com o ID do Objeto a ser atualizado
     public ResponseEntity<?> deletarAutomovel(@PathVariable("id") Long id ){
         return automovelService.obterPorId(id).map( automovel -> {
@@ -81,6 +90,7 @@ public class AutomovelController {
         );
     }
 
+    @ApiOperation(value = "Obter Automoveis Por Marcas")
     @PostMapping("/marca")
     public ResponseEntity<?> obterPorMarca(@RequestBody(required = false) Map marca){
         try {
@@ -101,6 +111,7 @@ public class AutomovelController {
         }
     }
 
+    @ApiOperation(value = "Obter Automoveis Por modelo")
     @PostMapping("/modelo")
     public ResponseEntity<?> obterPorModelo(@RequestBody(required = false) Map modelo){
         try {

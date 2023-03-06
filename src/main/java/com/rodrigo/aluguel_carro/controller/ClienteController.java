@@ -5,6 +5,8 @@ import com.rodrigo.aluguel_carro.dto.ClienteDTO;
 import com.rodrigo.aluguel_carro.entity.Cliente;
 import com.rodrigo.aluguel_carro.exceptions.ErroClienteException;
 import com.rodrigo.aluguel_carro.service.ClienteService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/cliente")
 @RequiredArgsConstructor
+@Api(value = "API REST Cliente")
+@CrossOrigin(origins = "*")
 public class ClienteController {
 
     private final ClienteService clienteService;
 
+    @ApiOperation(value = "Salva Cliente")
     @PostMapping()
     public ResponseEntity<?> salvarCliente(@RequestBody ClienteDTO clienteDTO){
         try{
@@ -34,6 +39,7 @@ public class ClienteController {
         }
     }
 
+    @ApiOperation(value = "Buscar Cliente por Id")
     @GetMapping("{id}")
     public ResponseEntity<?> obterClientePorId(@PathVariable("id") Long id){
         return clienteService.obterPorId(id)
@@ -43,6 +49,7 @@ public class ClienteController {
                 ).orElseGet( () -> new ResponseEntity<>("Cliente Não encontrado", HttpStatus.NOT_FOUND ));
     }
 
+    @ApiOperation(value = "Buscar todos Clientes")
     @GetMapping()
     public ResponseEntity<?> obterTodosAClientes(){
         try{
@@ -55,6 +62,7 @@ public class ClienteController {
         }
     }
 
+    @ApiOperation(value = "Atualizar Cliente por Id")
     @PutMapping("{id}")
     public ResponseEntity<?> atualizarCliente( @PathVariable("id") Long id, @RequestBody ClienteDTO clienteDTO ) {
         return clienteService.obterPorId(id).map( entity -> {
@@ -72,6 +80,7 @@ public class ClienteController {
                 new ResponseEntity<>("Cliente não encontrado na base de Dados.", HttpStatus.BAD_REQUEST) );
     }
 
+    @ApiOperation(value = "Deletar Cliente por Id")
     @DeleteMapping("{id}") // para atualizar @PutMapping("{id}") com o ID do Objeto a ser atualizado
     public ResponseEntity<?> deletarCliente(@PathVariable("id") Long id ){
         return clienteService.obterPorId(id).map( cliente -> {
@@ -84,6 +93,7 @@ public class ClienteController {
         );
     }
 
+    @ApiOperation(value = "Buscar Cliente por nome")
     @PostMapping("/nome")
     public ResponseEntity<?> obterPorNome(@RequestBody(required = false) Map nome){
         try {
