@@ -36,12 +36,10 @@ public class LocacaoTest {
 
     private Locacao persistirLocacao(Locacao locacao){
         Cliente cliente = Criar.cliente();
-        entityManager.persist(cliente);
-        cliente.setId(1L);
+        cliente = entityManager.persist(cliente);
 
         Automovel automovel = Criar.automovel();
-        entityManager.persist(automovel);
-        automovel.setId(1L);
+        automovel = entityManager.persist(automovel);
 
         locacao.setCliente(cliente);
         locacao.setAutomovel(automovel);
@@ -52,7 +50,7 @@ public class LocacaoTest {
     public void deveSalvarUmaLocacao(){
         Locacao locacao = Criar.locacao();
 
-        locacao = persistirLocacao(locacao);
+        persistirLocacao(locacao);
 
         locacao = locacaoRepository.save(locacao);
 
@@ -115,7 +113,7 @@ public class LocacaoTest {
     public void deveDeletarUmaLocacao(){
         Locacao locacao = Criar.locacao();
 
-        locacao = persistirLocacao(locacao);
+        persistirLocacao(locacao);
 
         entityManager.persist(locacao);
 
@@ -131,7 +129,7 @@ public class LocacaoTest {
     @Test void deveAtualizarUmaLocacao(){
         Locacao locacao = Criar.locacao();
 
-        locacao = persistirLocacao(locacao);
+        persistirLocacao(locacao);
         entityManager.persist(locacao);
 
         locacao.setValor(5555.0);
@@ -150,7 +148,7 @@ public class LocacaoTest {
     public void deveBuscarUmaLocacaoPorId(){
         Locacao locacao = Criar.locacao();
 
-        locacao = persistirLocacao(locacao);
+        persistirLocacao(locacao);
 
         entityManager.persist(locacao);
 
@@ -160,44 +158,44 @@ public class LocacaoTest {
 
     }
 
-//    @Test
-//    public void deveBuscarMaisDeUmaLocacaoPorCliente(){
-//
-//        Locacao locacao = Criar.locacao();
-//        Locacao locacaoNovo = Criar.locacao();
-//
-//        locacao = persistirLocacao(locacao);
-//        locacaoNovo.setCliente(locacao.getCliente());
-//        locacaoNovo.setAutomovel(locacao.getAutomovel());
-//
-//        entityManager.persist(locacao);        // persistindo os dados
-//        entityManager.persist(locacaoNovo);    // persistindo os dados
-//
-//        List<Locacao> locacaoExistentes = locacaoRepository.findAllByCliente_Id(locacao.getCliente().getId()); // buscando todos pelo ID do cliente
-//
-//        assertThat(locacaoExistentes.get(0).getId()).isNotNull();
-//        assertThat(locacaoExistentes.get(1).getId()).isNotNull();
-//
-//    }
+    @Test
+    public void deveBuscarMaisDeUmaLocacaoPorCliente(){
 
-//    @Test
-//    public void deveBuscarMaisDeUmaLocacaoPorAutomovel(){
-//
-//        Locacao locacao = Criar.locacao();     // primeira locacao a ser salva
-//        Locacao locacaoNovo = Criar.locacao(); // segunda locacao a ser salva
-//
-//        locacao = persistirLocacao(locacao);
-//        locacaoNovo.setCliente(locacao.getCliente());
-//        locacaoNovo.setAutomovel(locacao.getAutomovel());
-//
-//        entityManager.persist(locacao);      // persistindo os dados
-//        entityManager.persist(locacaoNovo); // persistindo os dados
-//
-//        List<Locacao> locacaoExistente = locacaoRepository.findAllByAutomovel_Id(locacao.getCliente().getId());  // buscando todos pelo ID do Automovel
-//
-//        assertThat(locacaoExistente.get(0).getId()).isNotNull();
-//        assertThat(locacaoExistente.get(1).getId()).isNotNull();
-//
-//    }
+        Locacao locacao = Criar.locacao();
+        Locacao locacaoNovo = Criar.locacao();
+
+        persistirLocacao(locacao);
+        locacaoNovo.setCliente(locacao.getCliente());
+        locacaoNovo.setAutomovel(locacao.getAutomovel());
+
+        entityManager.persist(locacao);        // persistindo os dados
+        entityManager.persist(locacaoNovo);    // persistindo os dados
+
+        List<Locacao> locacaoExistentes = locacaoRepository.findAllByCliente_Id(locacao.getCliente().getId()); // buscando todos pelo ID do cliente
+
+        assertThat(locacaoExistentes.get(0).getId()).isNotNull();
+        assertThat(locacaoExistentes.get(1).getId()).isNotNull();
+
+    }
+
+    @Test
+    public void deveBuscarMaisDeUmaLocacaoPorAutomovel(){
+
+        Locacao locacao = Criar.locacao();     // primeira locacao a ser salva
+        Locacao locacaoNovo = Criar.locacao(); // segunda locacao a ser salva
+
+        persistirLocacao(locacao);
+        locacaoNovo.setCliente(locacao.getCliente());
+        locacaoNovo.setAutomovel(locacao.getAutomovel());
+
+        entityManager.persist(locacao);      // persistindo os dados
+        entityManager.persist(locacaoNovo); // persistindo os dados
+
+        List<Locacao> locacaoExistente = locacaoRepository.findAllByAutomovel_Id(locacao.getAutomovel().getId());  // buscando todos pelo ID do Automovel
+
+        assertThat(locacaoExistente.get(0).getId()).isNotNull();
+        assertThat(locacaoExistente.get(1).getId()).isNotNull();
+
+    }
 
 }
