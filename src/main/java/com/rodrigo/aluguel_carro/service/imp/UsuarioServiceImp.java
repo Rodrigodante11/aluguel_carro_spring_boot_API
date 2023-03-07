@@ -5,6 +5,7 @@ import com.rodrigo.aluguel_carro.exceptions.ErroUsuarioException;
 import com.rodrigo.aluguel_carro.repository.UsuarioRepository;
 import com.rodrigo.aluguel_carro.service.UsuarioService;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -15,11 +16,24 @@ import java.util.regex.Pattern;
 @Service
 public class UsuarioServiceImp implements UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
+    private PasswordEncoder passwordEncoder;
 
-    public UsuarioServiceImp(UsuarioRepository usuarioRepository) {
+    public UsuarioServiceImp(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
+
+    private void cripografarSenha(Usuario usuario){
+
+        // criptografando a senha
+        String senha = usuario.getSenha();
+        String senhaCripto = passwordEncoder.encode(senha);
+        usuario.setSenha(senhaCripto);
+
+    }
+
 
     @Override
     public Usuario autenticar(String email, String senha) {
@@ -31,14 +45,19 @@ public class UsuarioServiceImp implements UsuarioService {
 
         }
 
-        return usuario.get();
+        boolean senhaBatem = passwordEncoder.matches(senha, usuario.get().getSenha());
 
+        if(!senhaBatem) { // apos verificar o email faz a verificacao se a senha eh igual
+            throw new ErroUsuarioException("Senha invalida");
+        }
+
+        return usuario.get();
     }
 
     @Override
     public Usuario salvar(Usuario usuario) {
         validar(usuario);
-
+        cripografarSenha(usuario);
         return usuarioRepository.save(usuario);
     }
 
