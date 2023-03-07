@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -31,6 +32,12 @@ public class UsuarioService {
     @MockBean
     UsuarioRepository usuarioRepository;
 
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
+//    @MockBean
+//    private JwtService jwtService;
+
     @Test
     public void devesalvarUmUsuario(){
         Usuario usuarioASalvar = Criar.usuario();
@@ -40,6 +47,8 @@ public class UsuarioService {
             usuarioSalvo.setId(1L);
 
             Mockito.doNothing().when(usuarioServiceImp).validar(usuarioASalvar);
+            Mockito.doNothing().when(usuarioServiceImp).cripografarSenha(usuarioSalvo);
+
             Mockito.when(usuarioRepository.save(usuarioASalvar)).thenReturn(usuarioSalvo);
 
             Usuario usuarioSalvoImp = usuarioServiceImp.salvar(usuarioASalvar);
