@@ -24,7 +24,7 @@ public class ClienteController {
 
     private final ClienteService clienteService;
 
-    @ApiOperation(value = "Salva Cliente")
+    @ApiOperation(value = "Salvar Cliente")
     @PostMapping()
     public ResponseEntity<?> salvarCliente(@RequestBody ClienteDTO clienteDTO){
         try{
@@ -86,7 +86,8 @@ public class ClienteController {
         return clienteService.obterPorId(id).map( cliente -> {
 
             clienteService.deletar(cliente);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Automovel "+ cliente.getNome() +" Deletado Com Sucesso",
+                    HttpStatus.NO_CONTENT);
 
         }).orElseGet( () ->
                 new ResponseEntity<>("Cliente nao encontrado na base de dados", HttpStatus.BAD_REQUEST)

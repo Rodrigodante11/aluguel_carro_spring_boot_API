@@ -4,6 +4,7 @@ import com.rodrigo.aluguel_carro.Utils.Criar;
 import com.rodrigo.aluguel_carro.entity.Automovel;
 import com.rodrigo.aluguel_carro.entity.Cliente;
 import com.rodrigo.aluguel_carro.entity.Locacao;
+import com.rodrigo.aluguel_carro.entity.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,16 +35,21 @@ public class LocacaoTest {
     @Autowired
     TestEntityManager entityManager;
 
-    private Locacao persistirLocacao(Locacao locacao){
+    private void persistirLocacao(Locacao locacao){
         Cliente cliente = Criar.cliente();
         cliente = entityManager.persist(cliente);
 
+        Usuario usuario = Criar.usuario();
+        usuario = entityManager.persist(usuario);
+
         Automovel automovel = Criar.automovel();
+        automovel.setUsuario(usuario);
         automovel = entityManager.persist(automovel);
+
 
         locacao.setCliente(cliente);
         locacao.setAutomovel(automovel);
-        return locacao;
+
     }
 
     @Test

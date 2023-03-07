@@ -18,4 +18,5 @@ public class AutomovelDTO {
     private String ano;
     private String imagem;
     private String tipoCarro;
+    private Long usuario;
 }

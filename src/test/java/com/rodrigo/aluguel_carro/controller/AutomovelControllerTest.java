@@ -4,9 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rodrigo.aluguel_carro.Utils.Criar;
 import com.rodrigo.aluguel_carro.dto.AutomovelDTO;
 import com.rodrigo.aluguel_carro.entity.Automovel;
+import com.rodrigo.aluguel_carro.entity.Usuario;
 import com.rodrigo.aluguel_carro.exceptions.ErroAutomovelException;
 import com.rodrigo.aluguel_carro.repository.AutomovelRepository;
 import com.rodrigo.aluguel_carro.service.AutomovelService;
+import com.rodrigo.aluguel_carro.service.UsuarioService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -42,14 +45,28 @@ public class AutomovelControllerTest {
     @MockBean
     AutomovelRepository automovelRepository;
 
+    @MockBean
+    UsuarioService usuarioService;
+
+    static Automovel automovel = Criar.automovel();
+    static Usuario usuario = Criar.usuario();
+    static Long id = 1L;
+
+    @BeforeAll
+    public static void setUpBeforeClass() {
+        automovel.setId(id);
+        usuario.setId(id);
+
+        automovel.setUsuario(usuario);
+    }
     @Test
     public void deveSalvarUmAutomovel() throws Exception {
-        Automovel automovel = Criar.automovel();
-        automovel.setId(1L);
 
         AutomovelDTO automovelDTO = Criar.automovelDTO();
+        automovelDTO.setUsuario(id);
 
         Mockito.when(automovelService.salvar(Mockito.any(Automovel.class))).thenReturn(automovel);
+        Mockito.when(usuarioService.obterPorId(id)).thenReturn(Optional.of(usuario));
 
         String json = new ObjectMapper().writeValueAsString(automovelDTO); // cast para Json
 
@@ -77,8 +94,10 @@ public class AutomovelControllerTest {
     public void deveLancarUmBadRequestAoTentarSalvarUmAutomovel() throws Exception {
 
         AutomovelDTO automovelDTO = Criar.automovelDTO();
+        automovelDTO.setUsuario(id);
 
         Mockito.when(automovelService.salvar(Mockito.any(Automovel.class))).thenThrow(ErroAutomovelException.class);
+        Mockito.when(usuarioService.obterPorId(id)).thenReturn(Optional.of(usuario));
 
         String json = new ObjectMapper().writeValueAsString(automovelDTO);
 
@@ -95,12 +114,12 @@ public class AutomovelControllerTest {
 
     @Test
     public void deveAtualizarUmAutomovel() throws Exception {
-        Long id = 1L;
-        Automovel automovel = Criar.automovel();
 
         AutomovelDTO automovelDTO = Criar.automovelDTO();
+        automovelDTO.setUsuario(id);
 
         Mockito.when(automovelService.atualizar(Mockito.any(Automovel.class))).thenReturn(automovel);
+        Mockito.when(usuarioService.obterPorId(id)).thenReturn(Optional.of(usuario));
         Mockito.when(automovelService.obterPorId(id)).thenReturn(Optional.ofNullable(automovel));
 
         String json = new ObjectMapper().writeValueAsString(automovelDTO);
@@ -127,10 +146,8 @@ public class AutomovelControllerTest {
 
     @Test
     public void deveLancarUmBadRequestAoTentarAtualizarUmAutomovelSemEstarNaBaseDeDados() throws Exception {
-        Long id = 10000L;
-        Automovel automovel = Criar.automovel();
-
         AutomovelDTO automovelDTO = Criar.automovelDTO();
+        automovelDTO.setUsuario(id);
 
         Mockito.when(automovelService.atualizar(Mockito.any(Automovel.class))).thenReturn(automovel);
         Mockito.when(automovelService.obterPorId(id)).thenReturn(Optional.empty());
@@ -150,11 +167,9 @@ public class AutomovelControllerTest {
 
     @Test
     public void deveBuscarUmAutomovelPorId() throws Exception {
-        Long id = 1L;
-        Automovel automovel = Criar.automovel();
-        automovel.setId(id);
 
         AutomovelDTO automovelDTO = Criar.automovelDTO();
+        automovelDTO.setUsuario(id);
 
         Mockito.when(automovelService.obterPorId(id)).thenReturn(Optional.of(automovel));
 
@@ -182,9 +197,9 @@ public class AutomovelControllerTest {
     }
     @Test
     public void deveLancarErroAoBuscarUmAutomovelPorIdInvalido() throws Exception {
-        Long id = 10000L;
 
         AutomovelDTO automovelDTO = Criar.automovelDTO();
+        automovelDTO.setUsuario(id);
 
         Mockito.when(automovelService.obterPorId(id)).thenReturn(Optional.empty());
 
@@ -203,11 +218,9 @@ public class AutomovelControllerTest {
 
     @Test
     public void deveDeletarUmAutomovelPorId() throws Exception {
-        Long id = 1L;
-        Automovel automovel = Criar.automovel();
-        automovel.setId(id);
 
         AutomovelDTO automovelDTO = Criar.automovelDTO();
+        automovelDTO.setUsuario(id);
 
         Mockito.when(automovelService.obterPorId(id)).thenReturn(Optional.of(automovel));
         Mockito.doNothing().when(automovelService).deletar(automovel);
@@ -227,11 +240,9 @@ public class AutomovelControllerTest {
 
     @Test
     public void deveLancarUmaExcessaoAoTentarDeletarUmAutomovelPorId() throws Exception {
-        Long id = 1L;
-        Automovel automovel = Criar.automovel();
-        automovel.setId(id);
 
         AutomovelDTO automovelDTO = Criar.automovelDTO();
+        automovelDTO.setUsuario(id);
 
         Mockito.when(automovelService.obterPorId(id)).thenReturn(Optional.empty());
 

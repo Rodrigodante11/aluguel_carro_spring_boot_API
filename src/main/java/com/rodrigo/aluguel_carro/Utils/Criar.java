@@ -6,6 +6,7 @@ import com.rodrigo.aluguel_carro.dto.LocacaoDTO;
 import com.rodrigo.aluguel_carro.entity.Automovel;
 import com.rodrigo.aluguel_carro.entity.Cliente;
 import com.rodrigo.aluguel_carro.entity.Locacao;
+import com.rodrigo.aluguel_carro.entity.Usuario;
 import com.rodrigo.aluguel_carro.enums.TipoCarro;
 import lombok.experimental.UtilityClass;
 
@@ -14,6 +15,16 @@ import java.time.LocalDate;
 
 @UtilityClass
 public class Criar {
+
+    public  static Usuario usuario(){
+        return Usuario.builder()
+                .nome("Rodrigo Augusto de Test")
+                .email("teste@gmail.com")
+                .senha("12356")
+                .isAdmin(true)
+                .data_cadastro(LocalDate.now())
+                .build();
+    }
 
     public static Automovel automovel(){  // Cria um Automovel usado para testes unitarios
         return Automovel.builder()

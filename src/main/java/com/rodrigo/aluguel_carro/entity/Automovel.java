@@ -36,6 +36,10 @@ public class Automovel {
     @Enumerated(value =  EnumType.STRING ) // @Enumerated(value =  EnumType.ORDINAL ) // pega pelo Ordem (0,1)
     private TipoCarro tipoCarro;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
 //    @ManyToMany
 //    @JoinTable(name= "locacao",schema = "aluguel_carro",
 //        joinColumns = @JoinColumn(name = "automovel_id", referencedColumnName = "id",nullable = false),
