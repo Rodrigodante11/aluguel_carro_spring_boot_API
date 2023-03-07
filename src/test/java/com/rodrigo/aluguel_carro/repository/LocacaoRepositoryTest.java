@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test") // vai procurar o aplication-test.properties e usar o BD em memória para teste e nao o oficial
 @DataJpaTest // Cria uma instância do banco de dados em memória e ao finalizar os testes ela deleta da memória
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class LocacaoTest {
+public class LocacaoRepositoryTest {
 
     @Autowired
     LocacaoRepository locacaoRepository;

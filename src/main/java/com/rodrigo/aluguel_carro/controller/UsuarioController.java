@@ -42,7 +42,7 @@ public class UsuarioController {
         return usuarioService.obterPorId(id).map( usuario -> {
 
             usuarioService.deletar(usuario);
-            return new ResponseEntity<>("Automovel "+ usuario.getNome() +" Deletado Com Sucesso",
+            return new ResponseEntity<>("Usuario "+ usuario.getNome() +" Deletado Com Sucesso",
                     HttpStatus.NO_CONTENT);
 
         }).orElseGet( () ->

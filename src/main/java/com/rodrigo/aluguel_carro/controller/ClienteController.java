@@ -86,7 +86,7 @@ public class ClienteController {
         return clienteService.obterPorId(id).map( cliente -> {
 
             clienteService.deletar(cliente);
-            return new ResponseEntity<>("Automovel "+ cliente.getNome() +" Deletado Com Sucesso",
+            return new ResponseEntity<>("Cliente "+ cliente.getNome() +" Deletado Com Sucesso",
                     HttpStatus.NO_CONTENT);
 
         }).orElseGet( () ->
