@@ -44,7 +44,6 @@ public class LocacaoServiceTest {
             Mockito.doNothing().when(locacaoServiceImp).validar(locacaoASalvar);
             Mockito.when(locacaoRepository.save(locacaoASalvar)).thenReturn(locacaoSalvo);
 
-
             Locacao locacaoSalvoImp= locacaoServiceImp.salvar(locacaoASalvar);
 
             assertThat(locacaoSalvoImp).isNotNull();
@@ -95,13 +94,13 @@ public class LocacaoServiceTest {
     }
 
     @Test
-    public void deveObterUmClientePorId(){
+    public void deveObterUmLocacaoPorId(){
         Locacao locacao = Criar.locacao();
         Long id = 1L;
         locacao.setId(id);
 
         // nao quero testar o metodo (findById)
-        // apenas disse quando ele foi chamado para retornar o Automovel direto pois nao estou testando esse metodo
+        // apenas disse quando ele foi chamado para retornar o Locacao direto pois nao estou testando esse metodo
         Mockito.when(locacaoRepository.findById(id)).thenReturn(Optional.of(locacao));
 
         Optional<Locacao> resultado = locacaoServiceImp.obterPorId(id);
@@ -124,7 +123,7 @@ public class LocacaoServiceTest {
 
     }
 
-    @Test void deveObterLocacoesPorClienteId(){
+    @Test void deveObterLocacoesPorLocacaoId(){
         Locacao locacao = Criar.locacao();
         Long id = 1L;
         locacao.setId(id);

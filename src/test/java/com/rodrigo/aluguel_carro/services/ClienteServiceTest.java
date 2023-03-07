@@ -106,7 +106,7 @@ public class ClienteServiceTest {
         cliente.setId(id);
 
         // nao quero testar o metodo (findById)
-        // apenas disse quando ele foi chamado para retornar o Automovel direto pois nao estou testando esse metodo
+        // apenas disse quando ele foi chamado para retornar o cliente direto pois nao estou testando esse metodo
         Mockito.when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
 
         Optional<Cliente> resultado = clienteServiceImp.obterPorId(id);
