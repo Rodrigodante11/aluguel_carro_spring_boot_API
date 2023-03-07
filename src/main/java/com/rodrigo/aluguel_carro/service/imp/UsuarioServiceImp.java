@@ -25,7 +25,7 @@ public class UsuarioServiceImp implements UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    private void cripografarSenha(Usuario usuario){
+    public void cripografarSenha(Usuario usuario){
 
         // criptografando a senha
         String senha = usuario.getSenha();

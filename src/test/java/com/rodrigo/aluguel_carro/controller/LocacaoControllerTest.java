@@ -16,10 +16,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,7 +33,8 @@ import java.util.Optional;
 
 @ExtendWith( SpringExtension.class)
 @ActiveProfiles("test") // vai procurar o aplication-test.properties e usar o BD em memoria para teste e nao o oficial
-@WebMvcTest(controllers = LocacaoController.class) // controle que ira ser testado
+@WebMvcTest(controllers = LocacaoController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @AutoConfigureMockMvc
 public class LocacaoControllerTest {
 
@@ -50,6 +53,9 @@ public class LocacaoControllerTest {
 
     @MockBean
     LocacaoRepository locacaoRepository;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
     static Locacao locacao = Criar.locacao();
     static Cliente cliente = Criar.cliente();
@@ -82,9 +88,11 @@ public class LocacaoControllerTest {
                 .post(API) // QUANDO EU FIZER ESSE POST
                 .accept(JSON) // VOU ACEITAR/RECEBER CONTEUDO JSON
                 .contentType(JSON) // E ESTOU ENVIADO OBJETO DO TIPO  JSON
-                .content(json); // E objetoJson Enviado
+                .content(json);
 
-        mvc.perform(request) // PERDORM == EXECUTA A REQUISICAO
+
+        mvc.perform(request)
+
                 .andExpect(MockMvcResultMatchers.status().isCreated()) // ESPERO UM STATUS Create e abaixo o json com cahve Valor
                 .andExpect(MockMvcResultMatchers.jsonPath("id").value(locacao.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("locacaoKM").value(locacao.getLocacaoKM()))

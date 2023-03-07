@@ -12,6 +12,7 @@ import com.rodrigo.aluguel_carro.service.UsuarioService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -29,7 +30,8 @@ import java.util.Optional;
 
 @ExtendWith( SpringExtension.class)
 @ActiveProfiles("test") // vai procurar o aplication-test.properties e usar o BD em memoria para teste e nao o oficial
-@WebMvcTest(controllers = AutomovelController.class) // controle que ira ser testado
+@WebMvcTest(controllers = AutomovelController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @AutoConfigureMockMvc
 public class AutomovelControllerTest {
 
