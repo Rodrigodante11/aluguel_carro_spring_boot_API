@@ -1,13 +1,7 @@
 package com.rodrigo.aluguel_carro.Utils;
 
-import com.rodrigo.aluguel_carro.dto.AutomovelDTO;
-import com.rodrigo.aluguel_carro.dto.ClienteDTO;
-import com.rodrigo.aluguel_carro.dto.LocacaoDTO;
-import com.rodrigo.aluguel_carro.dto.UsuarioDTO;
-import com.rodrigo.aluguel_carro.entity.Automovel;
-import com.rodrigo.aluguel_carro.entity.Cliente;
-import com.rodrigo.aluguel_carro.entity.Locacao;
-import com.rodrigo.aluguel_carro.entity.Usuario;
+import com.rodrigo.aluguel_carro.dto.*;
+import com.rodrigo.aluguel_carro.entity.*;
 import com.rodrigo.aluguel_carro.enums.TipoCarro;
 import lombok.experimental.UtilityClass;
 
@@ -156,5 +150,24 @@ public class Converter {
                 .isAdmin(usuarioDTO.isAdmin())
                 .build();
     }
+
+    public static Log log(LogDTO logDTO){
+        return Log.builder()
+                .evento(logDTO.getEvento())
+                .dataEvento(LocalDate.now())
+                .descricao(logDTO.getDescricao())
+                .build();
+    }
+
+    public static LogDTO log(Log log){
+        return LogDTO.builder()
+                .id(log.getId())
+                .evento(log.getEvento())
+                .dataEvento(log.getDataEvento())
+                .usuario(log.getUsuario().getId())
+                .descricao(log.getDescricao())
+                .build();
+    }
+
 
 }

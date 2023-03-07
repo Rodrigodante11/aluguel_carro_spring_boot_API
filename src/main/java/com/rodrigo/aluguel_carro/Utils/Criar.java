@@ -1,12 +1,7 @@
 package com.rodrigo.aluguel_carro.Utils;
 
-import com.rodrigo.aluguel_carro.dto.AutomovelDTO;
-import com.rodrigo.aluguel_carro.dto.ClienteDTO;
-import com.rodrigo.aluguel_carro.dto.LocacaoDTO;
-import com.rodrigo.aluguel_carro.entity.Automovel;
-import com.rodrigo.aluguel_carro.entity.Cliente;
-import com.rodrigo.aluguel_carro.entity.Locacao;
-import com.rodrigo.aluguel_carro.entity.Usuario;
+import com.rodrigo.aluguel_carro.dto.*;
+import com.rodrigo.aluguel_carro.entity.*;
 import com.rodrigo.aluguel_carro.enums.TipoCarro;
 import lombok.experimental.UtilityClass;
 
@@ -23,6 +18,15 @@ public class Criar {
                 .senha("12356")
                 .isAdmin(true)
                 .data_cadastro(LocalDate.now())
+                .build();
+    }
+
+    public  static UsuarioDTO usuarioDTO(){
+        return UsuarioDTO.builder()
+                .nome("Rodrigo Augusto de Test")
+                .email("teste@gmail.com")
+                .senha("12356")
+                .admin(true)
                 .build();
     }
 
@@ -98,6 +102,20 @@ public class Criar {
                 .valor(locacao.getValor())
                 .cliente(locacao.getCliente().getId())
                 .automovel(locacao.getAutomovel().getId())
+                .build();
+    }
+
+    public static Log log(){
+        return Log.builder()
+                .evento("deletou")
+                .dataEvento(LocalDate.now())
+                .descricao("Automovel do modelo tal ")
+                .build();
+    }
+    public static LogDTO logDTO(){
+        return LogDTO.builder()
+                .evento("deletou")
+                .descricao("Automovel do modelo tal ")
                 .build();
     }
 }

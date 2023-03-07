@@ -241,7 +241,7 @@ public class AutomovelControllerTest {
     }
 
     @Test
-    public void deveLancarUmaExcessaoAoTentarDeletarUmAutomovelPorId() throws Exception {
+    public void deveLancarUmaExcessaoAoTentarDeletarUmAutomovelPorIdInvalido() throws Exception {
 
         AutomovelDTO automovelDTO = Criar.automovelDTO();
         automovelDTO.setUsuario(id);
