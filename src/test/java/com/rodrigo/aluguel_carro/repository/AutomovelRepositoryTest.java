@@ -2,6 +2,7 @@ package com.rodrigo.aluguel_carro.repository;
 
 import com.rodrigo.aluguel_carro.Utils.Criar;
 import com.rodrigo.aluguel_carro.entity.Automovel;
+import com.rodrigo.aluguel_carro.entity.Usuario;
 import com.rodrigo.aluguel_carro.enums.TipoCarro;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,9 +32,21 @@ public class AutomovelRepositoryTest {
     @Autowired
     TestEntityManager entityManager;
 
+    private Automovel persistirAutomovel(){
+        Usuario usuario = Criar.usuario();
+        usuario = entityManager.persist(usuario);
+
+        Automovel automovel = Criar.automovel();
+        automovel.setUsuario(usuario);
+
+        return automovel;
+    }
+
     @Test
     public void deveSalvarUmAutomovel(){
-        Automovel automovel = Criar.automovel();
+
+
+        Automovel automovel = persistirAutomovel();
 
         automovel = automovelRepository.save(automovel);
 
@@ -44,7 +57,7 @@ public class AutomovelRepositoryTest {
 
         Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
 
-            Automovel automovel = Criar.automovel();
+            Automovel automovel = persistirAutomovel();
             automovel.setMarca(null);
             automovelRepository.save(automovel);
         });
@@ -53,7 +66,7 @@ public class AutomovelRepositoryTest {
     @Test
     public void deveSalvarUmAutomovelSemOsCamposObrigatorios(){
 
-        Automovel automovel = Criar.automovel();
+        Automovel automovel = persistirAutomovel();
         automovel.setDescricao(null);
         automovel.setImagem(null);
         automovel = automovelRepository.save(automovel);
@@ -65,7 +78,7 @@ public class AutomovelRepositoryTest {
 
         Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
 
-            Automovel automovel = Criar.automovel();
+            Automovel automovel = persistirAutomovel();
             automovel.setModelo(null);
             automovelRepository.save(automovel);
         });
@@ -75,7 +88,7 @@ public class AutomovelRepositoryTest {
 
         Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
 
-            Automovel automovel = Criar.automovel();
+            Automovel automovel = persistirAutomovel();
             automovel.setCor(null);
             automovelRepository.save(automovel);
         });
@@ -86,7 +99,7 @@ public class AutomovelRepositoryTest {
 
         Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
 
-            Automovel automovel = Criar.automovel();
+            Automovel automovel = persistirAutomovel();
             automovel.setPlaca(null);
             automovelRepository.save(automovel);
         });
@@ -96,14 +109,14 @@ public class AutomovelRepositoryTest {
 
         Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
 
-            Automovel automovel = Criar.automovel();
+            Automovel automovel = persistirAutomovel();
             automovel.setAno(null);
             automovelRepository.save(automovel);
         });
     }
     @Test
     public void deveDeletarUmAutomovel(){
-        Automovel automovel = Criar.automovel();
+        Automovel automovel = persistirAutomovel();
         entityManager.persist(automovel);
 
         automovel = entityManager.find(Automovel.class, automovel.getId());
@@ -116,7 +129,7 @@ public class AutomovelRepositoryTest {
     }
 
     @Test void deveAtualizarUmAutomovel(){
-        Automovel automovel = Criar.automovel();
+        Automovel automovel = persistirAutomovel();
         entityManager.persist(automovel);
 
         automovel.setAno("2010");
@@ -142,7 +155,7 @@ public class AutomovelRepositoryTest {
 
     @Test
     public void deveBuscarUmAutomovelPorId(){
-        Automovel automovel = Criar.automovel();
+        Automovel automovel = persistirAutomovel();
         entityManager.persist(automovel);
 
         Optional<Automovel> automovelExistente = automovelRepository.findById(automovel.getId());
@@ -152,7 +165,7 @@ public class AutomovelRepositoryTest {
     }
     @Test
     public void deveBuscarUmAutomovelPorModelo(){
-        Automovel automovel = Criar.automovel();
+        Automovel automovel = persistirAutomovel();
         entityManager.persist(automovel);
 
         List<Automovel> automovelExistente = automovelRepository.findAllByModeloContaining(automovel.getModelo());
@@ -162,10 +175,12 @@ public class AutomovelRepositoryTest {
     }
     @Test
     public void deveBuscarMaisDeUmAutomovelPorModelo(){
-        Automovel automovel = Criar.automovel();
+        Automovel automovel = persistirAutomovel();
         entityManager.persist(automovel);
 
         Automovel automovelNovo = Criar.automovel();
+        automovelNovo.setUsuario(automovel.getUsuario());
+
         entityManager.persist(automovelNovo);
 
         List<Automovel> automovelExistente = automovelRepository.findAllByModeloContaining(automovel.getModelo());
@@ -177,10 +192,12 @@ public class AutomovelRepositoryTest {
 
     @Test
     public void deveBuscarUmAutomovelPorMarca(){
-        Automovel automovel = Criar.automovel();
+        Automovel automovel = persistirAutomovel();
         entityManager.persist(automovel);
 
         Automovel automovelNovo = Criar.automovel();
+        automovelNovo.setUsuario(automovel.getUsuario());
+
         entityManager.persist(automovelNovo);
 
         List<Automovel> automovelExistente = automovelRepository.findAllByMarcaContaining(automovel.getMarca());
@@ -191,10 +208,12 @@ public class AutomovelRepositoryTest {
 
     @Test
     public void deveBuscarMaisDeUmAutomovelPorMarca(){
-        Automovel automovel = Criar.automovel();
+        Automovel automovel = persistirAutomovel();
         entityManager.persist(automovel);
 
         Automovel automovelNovo = Criar.automovel();
+        automovelNovo.setUsuario(automovel.getUsuario());
+
         entityManager.persist(automovelNovo);
 
         List<Automovel> automovelExistente = automovelRepository.findAllByMarcaContaining(automovel.getMarca());

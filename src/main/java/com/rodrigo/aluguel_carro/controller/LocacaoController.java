@@ -31,26 +31,30 @@ public class LocacaoController {
     private final ClienteService clienteService;
     private final AutomovelService automovelService;
 
-    @ApiOperation(value = "Salva Locação")
+    private void encontrarClienteEAutomovel(Locacao locacao, LocacaoDTO locacaoDTO){
+        Cliente cliente = clienteService
+                .obterPorId(locacaoDTO.getCliente())
+                .orElseThrow( () -> new ErroClienteException("Cliente não encontrado."));
+
+        Automovel automovel = automovelService
+                .obterPorId(locacaoDTO.getAutomovel())
+                .orElseThrow( () -> new ErroAutomovelException("Automovel não encontrado."));
+
+        locacao.setAutomovel(automovel);
+        locacao.setCliente(cliente);
+    }
+
+    @ApiOperation(value = "Salvar Locação")
     @PostMapping()
     public ResponseEntity<?> salvarLocacao(@RequestBody LocacaoDTO locacaoDTO){
 
         try{
 
-            Cliente cliente = clienteService
-                    .obterPorId(locacaoDTO.getCliente())
-                    .orElseThrow( () -> new ErroClienteException("Cliente não encontrado."));
+            Locacao locacao = Converter.locacao(locacaoDTO);
+            encontrarClienteEAutomovel(locacao, locacaoDTO);
 
-            Automovel automovel = automovelService
-                    .obterPorId(locacaoDTO.getAutomovel())
-                    .orElseThrow( () -> new ErroAutomovelException("Automovel não encontrado."));
-
-            Locacao locacaoEntidade = Converter.locacao(locacaoDTO);
-            locacaoEntidade.setAutomovel(automovel);
-            locacaoEntidade.setCliente(cliente);
-
-            locacaoEntidade = locacaoService.salvar(locacaoEntidade);
-            return new ResponseEntity<>(locacaoEntidade, HttpStatus.CREATED);
+            locacao = locacaoService.salvar(locacao);
+            return new ResponseEntity<>(locacao, HttpStatus.CREATED);
 
         }catch(ErroClienteException | ErroAutomovelException | ErroLocacaoException e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -73,7 +77,8 @@ public class LocacaoController {
     public ResponseEntity<?> deletarLocacao(@PathVariable("id") Long id ){
         return locacaoService.obterPorId(id).map( entidade -> {
             locacaoService.deletar(entidade);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Locação Deletado Com Sucesso",
+                    HttpStatus.NO_CONTENT);
         }).orElseGet( () ->
                 new ResponseEntity<>("Locação Não encontrado na base de dados", HttpStatus.BAD_REQUEST)
         );
@@ -98,27 +103,20 @@ public class LocacaoController {
         return locacaoService.obterPorId(id).map( entity -> {
             try {
 
-                Cliente cliente = clienteService
-                        .obterPorId(locacaoDTO.getCliente())
-                        .orElseThrow( () -> new ErroClienteException("Cliente não encontrado."));
 
-                Automovel automovel = automovelService
-                        .obterPorId(locacaoDTO.getAutomovel())
-                        .orElseThrow( () -> new ErroAutomovelException("Automovel não encontrado."));
+                Locacao locacao = Converter.locacao(locacaoDTO);
+                locacao.setId(entity.getId());
 
-                Locacao locacaoEntidade = Converter.locacao(locacaoDTO);
-                locacaoEntidade.setId(entity.getId());
-                locacaoEntidade.setCliente(cliente);
-                locacaoEntidade.setAutomovel(automovel);
+                encontrarClienteEAutomovel(locacao, locacaoDTO);
 
-                locacaoService.atualizar(locacaoEntidade);
-                return ResponseEntity.ok(locacaoEntidade);
+                locacaoService.atualizar(locacao);
+                return ResponseEntity.ok(locacao);
 
             }catch(ErroClienteException | ErroAutomovelException | ErroLocacaoException e){
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
         }).orElseGet( () ->
-                new ResponseEntity("Locação Não encontrado na base de Dados.", HttpStatus.BAD_REQUEST) );
+                new ResponseEntity<>("Locação Não encontrado na base de Dados.", HttpStatus.BAD_REQUEST) );
     }
 
 }

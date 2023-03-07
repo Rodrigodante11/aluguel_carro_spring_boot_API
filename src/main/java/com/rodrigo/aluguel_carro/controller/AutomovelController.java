@@ -3,8 +3,11 @@ package com.rodrigo.aluguel_carro.controller;
 import com.rodrigo.aluguel_carro.Utils.Converter;
 import com.rodrigo.aluguel_carro.dto.AutomovelDTO;
 import com.rodrigo.aluguel_carro.entity.Automovel;
+import com.rodrigo.aluguel_carro.entity.Usuario;
 import com.rodrigo.aluguel_carro.exceptions.ErroAutomovelException;
+import com.rodrigo.aluguel_carro.exceptions.ErroClienteException;
 import com.rodrigo.aluguel_carro.service.AutomovelService;
+import com.rodrigo.aluguel_carro.service.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +27,25 @@ public class AutomovelController {
 
     private final AutomovelService automovelService;
 
-    @ApiOperation(value = "Salva Automovel")
+    private final UsuarioService usuarioService;
+
+    private void encontrarUsuario(Automovel automovel, AutomovelDTO automovelDTO){
+        Usuario usuario = usuarioService
+                .obterPorId(automovelDTO.getUsuario())
+                .orElseThrow( () -> new ErroClienteException("Cliente não encontrado."));
+
+        automovel.setUsuario(usuario);
+
+    }
+
+    @ApiOperation(value = "Salvar Automovel")
     @PostMapping()
     public ResponseEntity<?> salvarAutomovel(@RequestBody AutomovelDTO automovelDTO){
         try{
+
             Automovel automovelEntidade = Converter.automovel(automovelDTO);
+            encontrarUsuario(automovelEntidade, automovelDTO);
+
             automovelEntidade = automovelService.salvar(automovelEntidade);
             return new ResponseEntity<>(automovelEntidade, HttpStatus.CREATED);
 
@@ -67,9 +84,13 @@ public class AutomovelController {
         return automovelService.obterPorId(id).map( entity -> {
 
             try {
+
                 Automovel automovel = Converter.automovel(automovelDTO);
+                encontrarUsuario(automovel, automovelDTO);
+
                 automovel.setId(entity.getId());
                 automovelService.atualizar(automovel);
+
                 return ResponseEntity.ok(automovel);
 
             }catch (ErroAutomovelException e) {
@@ -83,9 +104,13 @@ public class AutomovelController {
     @DeleteMapping("{id}") // para atualizar @PutMapping("{id}") com o ID do Objeto a ser atualizado
     public ResponseEntity<?> deletarAutomovel(@PathVariable("id") Long id ){
         return automovelService.obterPorId(id).map( automovel -> {
+
             automovelService.deletar(automovel);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Automovel "+ automovel.getModelo() +" Deletado Com Sucesso",
+                    HttpStatus.NO_CONTENT);
+
         }).orElseGet( () ->
+
                 new ResponseEntity<>("Automovel não encontrado na base de dados", HttpStatus.BAD_REQUEST)
         );
     }
