@@ -1,9 +1,11 @@
 package com.rodrigo.aluguel_carro.controller;
 
 import com.rodrigo.aluguel_carro.Utils.Converter;
+import com.rodrigo.aluguel_carro.dto.TokenDTO;
 import com.rodrigo.aluguel_carro.dto.UsuarioDTO;
 import com.rodrigo.aluguel_carro.entity.Usuario;
 import com.rodrigo.aluguel_carro.exceptions.ErroUsuarioException;
+import com.rodrigo.aluguel_carro.service.JwtService;
 import com.rodrigo.aluguel_carro.service.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+
+    private final JwtService jwtService;
 
     @ApiOperation(value = "Salvar Usuario")
     @PostMapping()
@@ -57,7 +61,10 @@ public class UsuarioController {
             Usuario usuarioAutenticado = usuarioService.autenticar(usuarioDTO.getEmail(), usuarioDTO.getSenha());
 
             // return new ResponseEntity(body, status);
-            return ResponseEntity.ok(usuarioAutenticado);
+            String token = jwtService.gerarToken(usuarioAutenticado);
+            TokenDTO tokenDTO = new TokenDTO( usuarioAutenticado.getNome(), token);
+
+            return ResponseEntity.ok(tokenDTO);
 
         }catch(ErroUsuarioException e){
             return ResponseEntity.badRequest().body(e.getMessage());
