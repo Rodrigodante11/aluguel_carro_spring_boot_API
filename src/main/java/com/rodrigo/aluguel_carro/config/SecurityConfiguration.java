@@ -1,30 +1,36 @@
 package com.rodrigo.aluguel_carro.config;
 
+import com.rodrigo.aluguel_carro.secutiry.JwtTokenFilter;
+import com.rodrigo.aluguel_carro.service.JwtService;
+import com.rodrigo.aluguel_carro.service.imp.SecutiryUserDetailsService;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+import java.util.List;
 
-@Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Autowired
+    private SecutiryUserDetailsService userDetailsService;
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        PasswordEncoder encoder= new BCryptPasswordEncoder(); // algoritimo de autenticacao para criptoghrafica sempre gera um hash diferente
-//        // diferente do MD5 que sempre gera o mesmo Hash
-//
-//        return encoder;
-//    }
+    @Autowired
+    private JwtService jwtService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -33,32 +39,57 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) { // usar usuario e senha em memoria e nao aquele hash que aparece em memoria
-        String senhaCodificada = passwordEncoder.encode("qwe123Rodrigo");
-        String senhaCodificadaAdimin = passwordEncoder.encode("qwe123Admin");
-
-        UserDetails user = User.withUsername("userRodrigo")
-                .password(senhaCodificada)
-                .roles("USER")
-                .build();
-
-        UserDetails admin = User.withUsername("adminRodrigo")
-                .password(senhaCodificadaAdimin)
-                .roles("USER", "ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
+    public JwtTokenFilter jwtTokenFilter() {
+        return new JwtTokenFilter(jwtService, userDetailsService);
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception { // pedir autorizacao para acessar API
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests()
-                .anyRequest()
-                .authenticated()
+                .authorizeHttpRequests()
+                .antMatchers(HttpMethod.POST,"/api/usuario/autenticar").permitAll()  // nao esta funcionando entao se criou a funcao acima (webSecurityCustomizer)
+                .antMatchers(HttpMethod.POST,"/api/usuario").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+        ; // para acesso a API pelo front(nesse caso sem seguranca pois a seguranca ja esta toda na API)
+
+
+
+
         return http.build();
     }
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
+
+    }
+
+    @Bean
+    public FilterRegistrationBean<CorsFilter> corsFilter(){
+
+        List<String> all = Arrays.asList("*");
+
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedMethods(all);
+        config.setAllowedOriginPatterns(all);
+        config.setAllowedHeaders(all);
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        CorsFilter corFilter = new CorsFilter(source);
+
+        FilterRegistrationBean<CorsFilter> filter =
+                new FilterRegistrationBean<CorsFilter>(corFilter);
+        filter.setOrder(Ordered.HIGHEST_PRECEDENCE);
+
+        return filter;
+    }
+
 }
