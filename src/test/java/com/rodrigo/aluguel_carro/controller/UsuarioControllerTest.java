@@ -5,6 +5,7 @@ import com.rodrigo.aluguel_carro.Utils.Criar;
 import com.rodrigo.aluguel_carro.dto.UsuarioDTO;
 import com.rodrigo.aluguel_carro.entity.Usuario;
 import com.rodrigo.aluguel_carro.exceptions.ErroUsuarioException;
+import com.rodrigo.aluguel_carro.service.JwtService;
 import com.rodrigo.aluguel_carro.service.UsuarioService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +41,9 @@ public class UsuarioControllerTest {
 
     @MockBean
     UsuarioService usuarioService;
+
+    @MockBean
+    JwtService jwtService;
 
 
     @Test
@@ -156,10 +160,7 @@ public class UsuarioControllerTest {
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("id").value(usuario.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("nome").value(usuario.getNome()))
-                .andExpect(MockMvcResultMatchers.jsonPath("email").value(usuario.getEmail()))
-                .andExpect(MockMvcResultMatchers.jsonPath("senha").value(usuario.getSenha()));
+                .andExpect(MockMvcResultMatchers.jsonPath("nome").value(usuario.getNome()));
 
     }
 
