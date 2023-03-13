@@ -15,8 +15,8 @@
 	<description>Projeto de Aluguel de Carros</description>
 	<properties>
 		<java.version>11</java.version>
-		<maven.compiler.target>11</maven.compiler.target>
-		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -75,33 +75,28 @@
 
 	<build>
 		<plugins>
-<!--			<plugin>-->
-<!--				<groupId>org.springframework.boot</groupId>-->
-<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--				<configuration>-->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+
 <!--					<excludes>-->
 <!--						<exclude>-->
 <!--							<groupId>org.projectlombok</groupId>-->
 <!--							<artifactId>lombok</artifactId>-->
 <!--						</exclude>-->
 <!--					</excludes>-->
-<!--				</configuration>-->
-<!--			</plugin>-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<useSystemClassLoader>false</useSystemClassLoader>
-					<forkedProcessExitTimeoutInSeconds>120</forkedProcessExitTimeoutInSeconds>
 				</configuration>
 			</plugin>
 <!--			<plugin>-->
-<!--				<artifactId>maven-compiler-plugin</artifactId>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-surefire-plugin</artifactId>-->
 <!--				<configuration>-->
-<!--					<source>11</source>-->
-<!--					<target>11</target>-->
+<!--					<useSystemClassLoader>false</useSystemClassLoader>-->
+<!--					<forkedProcessExitTimeoutInSeconds>120</forkedProcessExitTimeoutInSeconds>-->
 <!--				</configuration>-->
 <!--			</plugin>-->
+
 		</plugins>
 	</build>
 
