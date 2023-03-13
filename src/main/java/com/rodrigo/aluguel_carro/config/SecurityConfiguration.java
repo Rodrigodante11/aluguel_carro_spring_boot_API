@@ -3,7 +3,7 @@ package com.rodrigo.aluguel_carro.config;
 import com.rodrigo.aluguel_carro.secutiry.JwtTokenFilter;
 import com.rodrigo.aluguel_carro.service.JwtService;
 import com.rodrigo.aluguel_carro.service.imp.SecutiryUserDetailsService;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -62,7 +62,6 @@ public class SecurityConfiguration {
                 // other public endpoints of your API may be appended to this array
                 "favicon.ico",
                 "elasticbeanstalk.*",
-                "elasticbeanstalk"
         };
         http
                 .csrf().disable()
@@ -80,14 +79,16 @@ public class SecurityConfiguration {
         ; // para acesso a API pelo front(nesse caso sem seguranca pois a seguranca ja esta toda na API)
 
 
-
-
         return http.build();
     }
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
 
+    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/index","/favicon.ico");
     }
 
     @Bean
