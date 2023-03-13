@@ -9,6 +9,8 @@ import com.rodrigo.aluguel_carro.service.JwtService;
 import com.rodrigo.aluguel_carro.service.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.SecurityDefinition;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,7 @@ public class UsuarioController {
 
     @ApiOperation(value = "Deletar Usuario por Id")
     @DeleteMapping("{id}")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> deletarUsuario(@PathVariable("id") Long id ){
         return usuarioService.obterPorId(id).map( usuario -> {
 
