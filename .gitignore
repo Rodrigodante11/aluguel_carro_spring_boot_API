@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Elastic Beanstalk Files
+beanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

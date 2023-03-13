@@ -3,6 +3,7 @@ package com.rodrigo.aluguel_carro.config;
 import com.rodrigo.aluguel_carro.secutiry.JwtTokenFilter;
 import com.rodrigo.aluguel_carro.service.JwtService;
 import com.rodrigo.aluguel_carro.service.imp.SecutiryUserDetailsService;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -45,11 +46,31 @@ public class SecurityConfiguration {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        final String[] AUTH_WHITELIST = {
+                // -- Swagger UI v2
+                "/v2/api-docs",
+                "/swagger-resources",
+                "/swagger-resources/**",
+                "/configuration/ui",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**",
+                // -- Swagger UI v3 (OpenAPI)
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                // other public endpoints of your API may be appended to this array
+                "favicon.ico",
+                "elasticbeanstalk.*",
+                "elasticbeanstalk"
+        };
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .antMatchers(HttpMethod.POST,"/api/usuario/autenticar").permitAll()  // nao esta funcionando entao se criou a funcao acima (webSecurityCustomizer)
                 .antMatchers(HttpMethod.POST,"/api/usuario").permitAll()
+                .antMatchers().permitAll()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

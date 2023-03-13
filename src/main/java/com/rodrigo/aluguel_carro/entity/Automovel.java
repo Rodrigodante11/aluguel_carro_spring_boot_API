@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table( name="automovel" , schema = "aluguel_carro")
+@Table( name="automovel" , schema = "bd_aluguel")
 public class Automovel {
 
     @Id
