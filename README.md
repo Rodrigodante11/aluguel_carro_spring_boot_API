@@ -1,7 +1,8 @@
 ![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge) </br>
 [![Consulta Endereco](https://github.com/Rodrigodante11/aluguel_carro_spring_boot_API/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/Rodrigodante11/aluguel_carro_spring_boot_API/actions/workflows/maven-publish.yml)
 
-<h1 aligh="center"> Sistema de Aluguel de carro com tabela CARRO|CLIENTE|LOCACAO|USUARIO <h2>
+<h1 aligh="center"> Sistema de Aluguel de carro com tabela CARRO|CLIENTE|LOCACAO|USUARIO e Logs
+ <h2>
 <h1 aligh="center"> Persistencia dos dados em PostegreSQL e  o H2 para os testes unitarios <h2>
 
 <strong>Repositorio do BackEnd SpringBoot</strong> </br>
