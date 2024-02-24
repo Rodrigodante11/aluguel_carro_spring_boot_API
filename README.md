@@ -1,5 +1,5 @@
 ![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge) </br>
-[![Consulta Endereco](https://github.com/Rodrigodante11/aluguel_carro_spring_boot_API/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/Rodrigodante11/aluguel_carro_spring_boot_API/actions/workflows/maven-publish.yml)
+[![Aluguel carro backend CI](https://github.com/Rodrigodante11/aluguel_carro_spring_boot_API/actions/workflows/maven.yml/badge.svg)](https://github.com/Rodrigodante11/aluguel_carro_spring_boot_API/actions/workflows/maven.yml)
 
 <h1 aligh="center"> Sistema de Aluguel de carro com tabela CARRO|CLIENTE|LOCACAO|USUARIO e Logs
  <h2>
